@@ -6,9 +6,12 @@
 
 US: Code and projects for learning and reviewing Python and Django | UA:“Код і проекти для вивчення та повторення Python та Django”
 
-## Stages- 
+## Stages:
+
 ✅ Part 1: Python Crash Course- 
+
 ⏳ Part 2: Django + API (In Progress)- 
+
 🔜 Part 3: Product / MVP (TBD)
 
 ## Why I repeat Python: After practical experience, it's important to structure knowledge, so I use a book as a basic framework + git commits + explanations.
