@@ -31,3 +31,15 @@ top_guest.insert(2,'Roy Jones')
 top_guest.append('Oleksandr Usyk')
 for guest in top_guest:
     print(f'Welcome to meeting mr.{guest}, nice to meet you!')
+
+## Change to more short list of guests
+#
+print(f'Sorry, but only two guest can sit on the table in meeting!')
+print(f'Sorry, but guest {top_guest.pop()} do not come to meeting!')
+for guest in top_guest:
+    print(f'Hello mr.{guest}, we are waiting for you on meeting tonight!')
+print(f'\n {top_guest[4]}')
+del top_guest[4]
+del top_guest[3]
+del top_guest[2]
+print(top_guest)
