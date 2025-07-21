@@ -5,3 +5,4 @@
 3. Worked with brute force and its variations
 4. Use max(), min(), sum()
 5. List comprehension
+6. Slices
