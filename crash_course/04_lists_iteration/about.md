@@ -6,3 +6,4 @@
 4. Use max(), min(), sum()
 5. List comprehension
 6. Slices
+7. Lists copy
