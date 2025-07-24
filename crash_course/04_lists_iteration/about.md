@@ -7,3 +7,6 @@
 5. List comprehension
 6. Slices
 7. Lists copy
+8. Tasks for homework
+9. Tuples
+10. Recommendation
