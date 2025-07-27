@@ -2,3 +2,4 @@
 2. False, True ( Bool )
 3. Inequality check
 4. Number comparisons
+5. Conditional test
