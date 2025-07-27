@@ -20,3 +20,13 @@ for car in cars:
 # Bool check
 car = 'BMW'
 print(f'\ncar == {car} : {car =='BMW'}')
+## Code ## : car == BMW : True
+
+# Bool working different
+print(f"\ncar == 'bmw' : {car == 'bmw'}")
+## Code ## : car == 'bmw' : False
+
+# Bool with methods work
+car = 'Audi'
+print(f"\ncar.lower() == 'audi': {car.lower() == 'audi'}")
+## Code ## : car.lower() == 'audi': True
