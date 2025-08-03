@@ -1,0 +1,6 @@
+# ---EXERCISES---
+##6.1 Person:
+#-Use a dictionary to store information about a person you know. Store the person’s first name, last name, age, and city. The dictionary should contain keys with names like first_name, last_name, age, and city. Print each piece of information stored in the dictionary.114 Chapter 6 • Dictionaries
+#6.2 Favorite Numbers:
+##-Use a dictionary to store favorite numbers. Take five names and use them as dictionary keys. Think of a favorite number for each person and store it as a value in the dictionary. Print each person’s name and their favorite number. To make this problem more interesting, ask a few friends and collect real data for your program. 6.3 Glossary: Python dictionaries can be used to simulate a “real” dictionary (let’s call it a glossary to avoid confusion): Think of five programming terms you learned in previous chapters. Use these words as glossary keys and their definitions as values.
+##-•Print each word and its definition in a neatly formatted manner. For example, you can print the word, then a colon, then the definition, or the word on one line and its definition indented on the next line. Use the newline character (\n) to insert blank lines between word-definition pairs in the output.
