@@ -1,10 +1,10 @@
 # Homework from file tasks/glossary.md
 ## Task ## : 6.5
-# The river
+# The rivers
 from typing import Dict
 
 
-def rivers() -> Dict[str, object]:
+def rivers() -> Dict[str, str]:
     """Dict with three or more rivers"""
     rivers = {
         'nile':'egypt',
@@ -14,21 +14,21 @@ def rivers() -> Dict[str, object]:
     }
     return rivers
 
-def rivers_msg(rivers: Dict[str, object]) -> None:
+def rivers_msg(rivers: Dict[str, str]) -> None:
     """Print message with rivers"""
     count = 0
     for river in rivers.values():
         count+=1
         print(f"{count}. River - {river.title()}")
 
-def country_rivers_msg(rivers: Dict[str, object]) -> None:
+def countries_msg(rivers: Dict[str, str]) -> None:
     """Message with only country where rivers"""
     count = 0
-    for country in rivers:
+    for countrie in rivers:
         count+=1
-        print(f"{count}. Country with river is - {country.title()}")
+        print(f"{count}. Country with river is - {countrie.title()}")
 
 
 if __name__ == "__main__":
     rivers_msg(rivers())
-    country_rivers_msg(rivers())
+    countries_msg(rivers())
