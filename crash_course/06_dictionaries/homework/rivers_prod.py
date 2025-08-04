@@ -5,7 +5,20 @@ from typing import Dict,Literal
 Rivers_Dict = Dict[str,str]
 
 def get_rivers() -> Rivers_Dict:
-    """Dict with rivers and countries"""
+    """
+    Print rivers, countries, or both depending on mode.
+
+    Args:
+        data (Dict[str, str]): Dictionary with rivers and their corresponding countries.
+        mode (str): "all", "countries", or "rivers" to control output.
+
+    Example:
+        >>> print_info(get_rivers(), mode="rivers")
+        1. Nile
+        2. Amazon
+        3. Dnepr
+    """
+
     return {
     'nile':'egypt',
     'amazon':'brazil',
