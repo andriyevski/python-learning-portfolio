@@ -1,10 +1,11 @@
 # How work list in dict
 favorite_language = {
-    'jen':['pyton','ruby'],
+    'jen':['python','ruby'],
     'sarah':['c'],
     'edward':['ruby','go'],
     'phil':['python','haskell'],
 }
+
 
 for name, languages in favorite_language.items():
     print(f"\n{name.title()}'s favorite languages are:")
