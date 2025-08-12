@@ -13,3 +13,8 @@ print("-"*20)
 print("Or use like this, more Pythonic!")
 print("-"*30)
 # or use this
+
+for name, fav_numbers in zip(names, numbers):
+    print(f"\n{name}'s favorite numbers are:")
+    for number in fav_numbers:
+        print(f" - {number}")
