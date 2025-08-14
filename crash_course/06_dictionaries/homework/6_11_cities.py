@@ -2,10 +2,25 @@
 ## Task ## : 6.11
 # 6_11_ cities
 cities = {
-    'Kyiev':['Ukraine','5 250 000 people live here','capital of ukraine!'],
-    'Chernivtsi':['Ukraine','250 000 people live here','was romania,austria,moldovian in past!'],
-    'New York':['USA','15 250 000 people live here','Have a time square, mowt popular zone in city!'],
+    "Tokyo": {
+        "country": "Japan",
+        "population": 14_000_000,
+        "fact": "Tokyo is the most populous metropolitan area in the world."
+    },
+    "Paris": {
+        "country": "France",
+        "population": 2_100_000,
+        "fact": "Paris is known as the 'City of Light' and is home to the Eiffel Tower."
+    },
+    "Chernivtsi": {
+        "country": "Ukraine",
+        "population": 260_000,
+        "fact": "Chernivtsi is often called 'Little Vienna' for its architecture and cultural heritage."
+    }
 }
 
-for citie in range(len(cities)):
-    print(f"Talk about {citie}: {citie[citie]}\n - Interesting fact: {citie}")
+for city, info in cities.items():
+    print(f"\n🏙️ {city}")
+    print(f"  Country: {info['country']}")
+    print(f"  Population: {info['population']:,}")
+    print(f"  Fact: {info['fact']}")
