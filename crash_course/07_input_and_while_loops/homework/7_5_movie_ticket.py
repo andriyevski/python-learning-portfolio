@@ -2,19 +2,17 @@
 # ## Task ## : 7.5
 # # 7_5_movie_ticket
 while True:
-    age_input = input("\nВведите ваш возраст для входа в кино (или 'выход' для завершения): ")
-
-    if age_input.lower() == 'выход':
-        print("Спасибо за использование системы! До встречи в кинотеатре 🎬")
-        break
-
     try:
-        age = int(age_input)
-        if age < 3:
-            print("Билет бесплатный!")
+        age = int(input("\nWrite your age to take ticket to movie (or type 0 to exit): "))
+
+        if age == 0:
+            print("Goodbye! 🎬")
+            break
+        elif age < 3:
+            print("You can enter cinema free!")
         elif age <= 12:
-            print("Цена билета: $10")
+            print("Your ticket price is $10")
         else:
-            print("Цена билета: $15")
+            print("Your ticket price is $15")
     except ValueError:
-        print("Пожалуйста, введите корректный возраст или 'выход'.")
+        print("Please enter a valid number.")
