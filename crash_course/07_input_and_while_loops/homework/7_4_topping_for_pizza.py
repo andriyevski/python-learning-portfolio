@@ -1,6 +1,6 @@
-# # Homework from file tasks/7_4_topping_for_pizza.md
-# ## Task ## : 7.4
-# # 7_4_topping_for_pizza
+# Homework from file tasks/7_4_topping_for_pizza.md
+## Task ## : 7.4
+# 7_4_topping_for_pizza
 promt = "\nHello, what is the toppings for pizza you want?"
 promt_2 ="\nChery,olives,cheese or something else? or 'quit' to exit!\n"
 
