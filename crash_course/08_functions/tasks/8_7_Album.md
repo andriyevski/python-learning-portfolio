@@ -1,0 +1,3 @@
+# 8.7. Album:
+
+## write a function make_album() that builds a dictionary with a description of a music album. The function should take the artist's name and the album title and return a dictionary containing these two pieces of information. Use the function to create three dictionaries representing different albums. Print all returned values to show that the information is correctly stored in all three dictionaries.Add an additional parameter in make_album() for storing the number of tracks in the album, with a default value of None. If the number of tracks is included in the call string, add this value to the album dictionary. Create at least one new function call passing the number of tracks in the album.
