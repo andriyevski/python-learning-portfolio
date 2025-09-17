@@ -1,0 +1,2 @@
+#8.14. Cars:
+## write a function to save information about a car in a dictionary. The function should always return the manufacturer and model name, but it can receive any number of keyword arguments. Call the function by providing the required information and two more ‘name-value’ pairs (for example, color and package). Your function should work for calls of the following kind: car = make_car('subaru', 'outback', color='blue', tow_package=True) Print the returned dictionary and ensure that all information has been saved correctly.
