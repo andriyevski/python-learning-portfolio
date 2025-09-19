@@ -3,7 +3,7 @@
 # 8_14_Cars
 from typing import Dict, Any
 
-def make_car(company: str, model: str, **car_info: Dict[str,Any]) -> Dict:
+def make_car(company: str, model: str, **car_info: Dict[str,Any]) -> Dict[str, Any]:
     """
     Car information about a car return in a dictionary
     """

@@ -1,3 +1,3 @@
-import pizza
+from pizza import make_pizza as mp
 
-pizza.make_pizza(35, 'green peppers','extra cheese', 'peperoni')
+mp(35, 'green peppers','extra cheese', 'peperoni')
