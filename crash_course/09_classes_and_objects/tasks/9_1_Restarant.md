@@ -1,0 +1,2 @@
+# 9.1. Restaurant:
+## create a class named Restaurant. The __init__() method of the Restaurant class should contain two attributes: restaurant_name and cuisine_type. Create a method describe_restaurant(), which outputs the two attributes, and a method open_restaurant(), which outputs a message that the restaurant is open. Create an instance named restaurant based on your class. Output the two attributes separately, then call both methods.
