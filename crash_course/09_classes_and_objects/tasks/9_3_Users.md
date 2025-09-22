@@ -1,0 +1,2 @@
+#9.3. Users:
+## create a class named User. Create two attributes first_name and last_name, and then several other attributes that are typically stored in a user profile. Write a method describe_user() that outputs a summary with information about the user. Create another method greet_user() for outputting a personal greeting for the user. Create several instances representing different users. Call both methods for each user.
