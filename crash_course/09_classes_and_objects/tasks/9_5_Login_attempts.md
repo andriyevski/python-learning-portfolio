@@ -1,0 +1,2 @@
+#9.5. Login attempts:
+## add the attribute login_attempts to the User class from exercise 9.3 (p. 175). Write a method increment_login_attempts() that increases the value of login_attempts by 1. Write another method named reset_login_attempts() that resets the value of login_attempts. Create an instance of the User class and call increment_login_attempts() several times. Print the value of login_attempts to ensure that it has been changed correctly, then call reset_login_attempts(). Print login_attempts again and ensure that the value has been reset.
