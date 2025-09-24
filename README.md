@@ -8,11 +8,11 @@ US: Code and projects for learning and reviewing Python and Django
 
 ## Stages:
 
-✅ Part 1: Python Crash Course- 
+✅ Part 1: Python Crash Course - basic exercises, algorithms, examples
 
-⏳ Part 2: Django + API (In Progress)- 
+⏳ Part 2: Django + API (In Progress) - currently being developed
 
-🔜 Part 3: Product / MVP (TBD)
+🔜 Part 3: Product / MVP (TBD) - planned
 
 ## Why I repeat Python: After practical experience, it's important to structure knowledge, so I use a book as a basic framework + git commits + explanations.
 
@@ -21,13 +21,15 @@ US: Code and projects for learning and reviewing Python and Django
 2. Create a virtual environment
    ```bash
    python -m venv venv
-   source venv/bin/activate #
-   Linux/macOSvenvScriptsactivate.bat # Windows
+   source venv/bin/activate # Linux / MacOs
+   venv\Scripts\activate # Windows
   ```
 
-# 🤝 Contributin
+# 🤝 Contributin / How to participate
 ## Participating in the project
-- Add your fork, create a branch feature/your-name
+- Fork the repository
+- Create a branch feature/name
+- Add a description of changes in the Pull Request
 - Submit a pull request with a description of the changes
 - Follow PEP 8 and add minimal tests if possible
 
