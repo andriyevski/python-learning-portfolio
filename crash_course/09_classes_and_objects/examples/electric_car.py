@@ -31,20 +31,38 @@ class Car():
         self.odometer_reading += miles
 
 
-class ElecticCar(Car):
+class ElectricCar(Car):
 
-    def __init(self, make, model, year):
-        super().__init__(self, make, model, year)
+    def __init__(self, make, model, year):
+        super().__init__(make, model, year)
+        # self.battery_size = 75
+        self.battery = Battery()
+    # def get_describe_battery(self):
+    #     """ Init battery power! """
+    #     print(f"This car has a {self.battery_size}-kwh batery")
 
+    def fill_gas_tank(self):
+        """ Electro car doesn't have a gas tank """
+        print("This car doesn't need a gas tank!")
+
+class Battery():
+    """ Simple model of Battery car """
+    def __init__(self, battery_size = 75):
+        self.battery_size = battery_size
+
+    def get_describe_battery(self):
+        print(f"This car has a {self.battery_size}-kwh batery")
 
 
 my_new_car = Car('audi', 'a4', 2019)
 print(my_new_car.get_descriptive_name())
 my_new_car.update_odometer(23)
 my_new_car.increment_odometer(140_000)
-my_new_car.read_odometer()
 
 
 
-my_electro_car = ElecticCar('Tesla', 'Model Y', 2023)
+
+my_electro_car = ElectricCar('Tesla', 'Model Y', 2023)
 print(my_electro_car.get_descriptive_name())
+my_electro_car.battery = Battery(battery_size=125)
+my_electro_car.battery.get_describe_battery()
