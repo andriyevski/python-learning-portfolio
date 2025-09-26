@@ -1,0 +1,2 @@
+# 9.6. Ice Cream Stand:
+## An ice cream stand is a special kind of restaurant. Write a class IceCreamStand that inherits from the Restaurant class from exercise 9.1 (p. 175) or exercise 9.4 (p. 180). Any version of the class will work; just choose the one you like best. Add an attribute named flavors to store a list of ice cream flavors. Write a method that displays this list. Create an instance of IceCreamStand and call this method.
