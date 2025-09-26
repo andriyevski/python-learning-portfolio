@@ -1,0 +1,2 @@
+#9.7. Administrator:
+## An administrator is a special kind of user. Write a class named Admin that inherits from the User class from exercise 9.3 or exercise 9.5 (p. 180). Add an attribute privileges to store a list of strings such as 'allowed to add posts', 'allowed to delete users', 'allowed to ban users', etc. Write a method show_privileges() to display the set of administrator privileges. Create an instance of Admin and call your method.
