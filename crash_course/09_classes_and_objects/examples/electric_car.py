@@ -53,6 +53,17 @@ class Battery():
     def get_describe_battery(self):
         print(f"This car has a {self.battery_size}-kwh batery")
 
+    def get_range(self):
+        """ Displays the approximate range for the battery. """
+        if self.battery_size == 75:
+            car_range = 260
+        elif self.battery_size == 100:
+            car_range = 315
+        else:
+            car_range = 200
+
+        print(f"This car can go about {car_range} miles on a full charge.")
+
 
 my_new_car = Car('audi', 'a4', 2019)
 print(my_new_car.get_descriptive_name())
@@ -61,8 +72,8 @@ my_new_car.increment_odometer(140_000)
 
 
 
-
 my_electro_car = ElectricCar('Tesla', 'Model Y', 2023)
 print(my_electro_car.get_descriptive_name())
 my_electro_car.battery = Battery(battery_size=125)
 my_electro_car.battery.get_describe_battery()
+my_electro_car.battery.get_range()
