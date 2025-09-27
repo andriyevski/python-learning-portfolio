@@ -1,9 +1,7 @@
 # Homework from file tasks/9_7_Administrator.md
 ## Task ## : 9.7
 # 9_7_Administrator
-# Homework from file tasks/9_3_Users.md
-## Task ## : 9.3
-# 9_3_Users
+
 from typing import Dict, Any
 
 class Users():
