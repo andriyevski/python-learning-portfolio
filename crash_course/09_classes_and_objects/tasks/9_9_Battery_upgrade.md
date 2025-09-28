@@ -1,0 +1,2 @@
+#9.9. Battery Upgrade:
+## Use the final version of the electric_car.py program from this section. Add a method to the Battery class named upgrade_battery(). This method should check the battery size and set the power to 100 if it has a different value. Create an electric car instance with the default battery, call get_range(), and then call get_range() a second time after calling upgrade_battery(). Make sure that the range has increased.
