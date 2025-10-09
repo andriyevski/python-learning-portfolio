@@ -8,7 +8,7 @@ US: Code and projects for learning and reviewing Python and Django
 
 ## Stages:
 
-✅ Part 1: Python Crash Course - basic exercises, algorithms, examples
+✅ Part 1: Python Crash Course - basic exercises, examples
 
 ⏳ Part 2: Django + API (In Progress) - currently being developed
 
