@@ -17,3 +17,16 @@ with open(filename) as file_object:
 
 for line in lines:
     print(line.replace(" ",""))
+
+
+pi_string = ""
+for line in lines:
+    pi_string += line.replace(" ","")
+
+print(pi_string)
+real_len_string = len(line)
+replace_len_string = len(pi_string)
+print(f"Real sting len is: {real_len_string}")
+print(line)
+print(f"Change len string is: {replace_len_string}")
+print(pi_string)
