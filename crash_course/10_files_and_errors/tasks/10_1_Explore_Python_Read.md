@@ -1,0 +1,2 @@
+# 10.1. Learning Python:
+## open an empty file in a text editor and write a few lines about Python's capabilities. Each line should start with the phrase 'In Python you can…'. Save the file as learning_python.txt in the directory used for the examples in this chapter. Write a program that reads the file and prints the text three times: by reading the entire file, by iterating over the lines of the object
