@@ -7,7 +7,7 @@ while True:
     name = input("Enter your name: ").strip()
 
     # if name == 'q' or name == 'Q' or name == 'exit' or name == 'Exit':
-    if name.lower() in ['q','exit']:
+    if name.lower() in ('q','exit',):
         print("\nGood Bye!\n")
         break
     elif name:
