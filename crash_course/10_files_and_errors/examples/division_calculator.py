@@ -12,8 +12,16 @@ while True:
     first_number = input("\nFirst Number: ")
     if first_number.lower() in quit_param:
         break
-    second_number = input("\nSecond number: ")
+
+    second_number = input("Second Number: ")
     if second_number.lower() in quit_param:
         break
-    answer = int(first_number)/int(second_number)
-    print(int(answer))
+
+    try:
+        answer = int(first_number)/int(second_number)
+    except ZeroDivisionError:
+        print("Why you use zero: 0 ?")
+    except ValueError:
+        print("Please enter valid integers!")
+    else:
+        print(int(answer))
