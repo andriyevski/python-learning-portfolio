@@ -1,8 +1,8 @@
-
-try:
-    print(5/0)
-except ZeroDivisionError:
-    print("No you can't divide by zero! -> 0")
+# 
+# try:
+#     print(5/0)
+# except ZeroDivisionError:
+#     print("No you can't divide by zero! -> 0")
 
 
 print("Give me two numbers, and i'll divided them.")
