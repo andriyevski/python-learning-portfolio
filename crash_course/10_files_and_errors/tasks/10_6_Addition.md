@@ -1,0 +1,2 @@
+#10.6. Addition:
+## When entering numeric data, a common problem occurs: the user enters text instead of numbers. When attempting to convert the data to an int, a ValueError exception occurs. Write a program that asks for two numbers, adds them, and prints the result. Catch the ValueError exception if either input value is not a number and print a helpful error message. Test your program: first enter two numbers, and then enter text in place of one of the numbers.
