@@ -1,3 +1,6 @@
+# Homework from file tasks/10_7_Calculator.md
+## Task ## : 10.7
+# 10_7_Calculator
 quit_param = ['q', 'exit']
 
 while True:

@@ -1,0 +1,2 @@
+#10.8. Cats and Dogs:
+## Create two files named cats.txt and dogs.txt. Store at least three cat names in the first file and three dog names in the second. Write a program that attempts to read these files and displays their contents. Enclose your code in a try-except block to catch the FileNotFoundError exception and display a clear message about the missing file. Move one of the files to a different location in the file system; verify that the except block executes as expected.
