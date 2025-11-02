@@ -7,7 +7,7 @@ class TestDataInCase(unittest.TestCase):
     def name_splitter(self, full_name: str):
         """ All name and last name split """
         splitted_data = full_name.split(' ')
-        return splitted_data.title()
+        return splitted_data
 
     def test_name_comeback(self):
         data_respond = get_formatted_name('janis', 'joplin')
@@ -32,4 +32,3 @@ class NamesTestCase(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
-    test_name_splitter('janis','joplin')
