@@ -12,14 +12,28 @@ class TestDataInCase(unittest.TestCase):
     def test_name_comeback(self):
         data_respond = get_formatted_name('janis', 'joplin')
         splitted_name = self.name_splitter(data_respond)
-        print(splitted_name[0])
+        #print(splitted_name[0])
         self.assertIn('Janis', splitted_name[0])
 
     def test_last_name_comeback(self):
         data_respond = get_formatted_name('janis', 'joplin')
         splitted_last_name = self.name_splitter(data_respond)
-        print(splitted_last_name[1])
+        #print(splitted_last_name[1])
         self.assertIn('Joplin', splitted_last_name[1])
+
+    def test_multiple_names(self):
+        """ Test on many names of different people! """
+        test_cases = [
+            ('janis', 'joplin', ['Janis', 'Joplin']),
+            ('antonio', 'Banderas', ['Antonio', 'Banderas']),
+            ('Luciano', 'romalio', ['Luciano', 'Romalio']),
+        ]
+        for first, last, expected in test_cases:
+            with self.subTest(first=first, last=last):
+                full = get_formatted_name(first, last)
+                parts = self.name_splitter(full)
+                self.assertEqual(parts, expected)
+
 
 
 class NamesTestCase(unittest.TestCase):
