@@ -1,6 +1,27 @@
 import unittest
 from name_function import get_formatted_name
 
+class TestDataInCase(unittest.TestCase):
+    """ Check if data can return from function """
+
+    def name_splitter(self, full_name: str):
+        """ All name and last name split """
+        splitted_data = full_name.split(' ')
+        return splitted_data.title()
+
+    def test_name_comeback(self):
+        data_respond = get_formatted_name('janis', 'joplin')
+        splitted_name = self.name_splitter(data_respond)
+        print(splitted_name[0])
+        self.assertIn('Janis', splitted_name[0])
+
+    def test_last_name_comeback(self):
+        data_respond = get_formatted_name('janis', 'joplin')
+        splitted_last_name = self.name_splitter(data_respond)
+        print(splitted_last_name[1])
+        self.assertIn('Joplin', splitted_last_name[1])
+
+
 class NamesTestCase(unittest.TestCase):
     """ Test for 'name_function' """
 
@@ -11,3 +32,4 @@ class NamesTestCase(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+    test_name_splitter('janis','joplin')
