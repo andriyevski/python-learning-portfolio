@@ -1,6 +1,7 @@
 import unittest
 from name_function import get_formatted_name
 
+
 class TestDataInCase(unittest.TestCase):
     """ Check if data can return from function """
 
@@ -35,7 +36,6 @@ class TestDataInCase(unittest.TestCase):
                 self.assertEqual(parts, expected)
 
 
-
 class NamesTestCase(unittest.TestCase):
     """ Test for 'name_function' """
 
@@ -43,6 +43,12 @@ class NamesTestCase(unittest.TestCase):
         """ Name view 'Janis Joplin' work correct ? """
         formatted_name = get_formatted_name('janis', 'joplin')
         self.assertEqual(formatted_name, 'Janis Joplin')
+
+    def test_first_last_middle_name(self):
+        """ If work 'Wolfgan Amadeus Mozart' ? """
+        formatted_name = get_formatted_name('Wolfgan','Mozart','Amadeus')
+        self.assertEqual(formatted_name, 'Wolfgan Amadeus Mozart')
+
 
 if __name__ == "__main__":
     unittest.main()
