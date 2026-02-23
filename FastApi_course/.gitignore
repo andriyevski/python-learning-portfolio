@@ -1,0 +1,15 @@
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Віртуальне середовище
+venv/
+
+# IDE/Editor файли
+.vscode/
+.idea/
+
+# Системні файли Windows
+Thumbs.db
+desktop.ini
