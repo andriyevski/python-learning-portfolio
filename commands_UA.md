@@ -1,4 +1,5 @@
 <div align="center">
+ 
 # 🐧 FEDORA LINUX · ШПАРГАЛКА АДМІНІСТРАТОРА
  
 **Fedora 44 · KDE Plasma · Btrfs + Snapper · NVIDIA · Docker/Podman**
