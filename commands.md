@@ -1,154 +1,158 @@
 <div align="center">
-# 🐧 FEDORA LINUX · ШПАРГАЛКА АДМІНІСТРАТОРА
- 
+
+# 🐧 FEDORA LINUX · ADMIN CHEAT SHEET
+
 **Fedora 44 · KDE Plasma · Btrfs + Snapper · NVIDIA · Docker/Podman**
- 
-*Особистий довідник: знайшов → скопіював → виконав*
- 
+
+*Personal reference: find → copy → run*
+
 ![Fedora](https://img.shields.io/badge/Fedora-44-51A2DA?logo=fedora&logoColor=white)
 ![Btrfs](https://img.shields.io/badge/FS-Btrfs-orange)
 ![Snapper](https://img.shields.io/badge/Backup-Snapper-green)
 ![Python](https://img.shields.io/badge/Dev-Python%20Backend-3776AB?logo=python&logoColor=white)
- 
+
 </div>
+
 ---
- 
-## 🧭 Як користуватися
- 
-| Позначка | Значення |
+
+## 🧭 How to Use
+
+| Marker | Meaning |
 |:---:|---|
-| 🟢 | Безпечно, можна виконувати без роздумів |
-| 🟡 | Змінює систему, перевір перед запуском |
-| 🔴 | Небезпечно / незворотно, спершу зроби сніпшот |
-| 💡 | Корисна порада |
-| 🆕 | Додано до твоєї версії |
- 
+| 🟢 | Safe, run without a second thought |
+| 🟡 | Changes the system, double-check before running |
+| 🔴 | Dangerous / irreversible, take a snapshot first |
+| 💡 | Useful tip |
+| 🆕 | Added to your version |
+
 > [!TIP]
-> Шукай команду через `Ctrl+F` за тегом, наприклад `#nvidia`, `#snapper`, `#firewalld`.
-> `<...>` у командах означає, що значення потрібно підставити своє.
- 
+> Search for a command with `Ctrl+F` by tag, e.g. `#nvidia`, `#snapper`, `#firewalld`.
+> `<...>` in commands means you must substitute your own value.
+
 ---
- 
-## 📑 Зміст
- 
-1. [⚡ Топ-15: команди на кожен день](#-топ-15-команди-на-кожен-день)
-2. [📦 Пакети та оновлення (DNF5)](#-1-пакети-та-оновлення-dnf5)
+
+## 📑 Table of Contents
+
+1. [⚡ Top 15: Everyday Commands](#-top-15-everyday-commands)
+2. [📦 Packages and Updates (DNF5)](#-1-packages-and-updates-dnf5)
 3. [📚 Flatpak 🆕](#-2-flatpak-)
 4. [💾 Btrfs + Snapper](#-3-btrfs--snapper)
-5. [🧠 Ядро, NVIDIA, GRUB](#-4-ядро-nvidia-grub)
+5. [🧠 Kernel, NVIDIA, GRUB](#-4-kernel-nvidia-grub)
 6. [⚙️ Systemd](#️-5-systemd)
-7. [🛡️ Мережа та безпека](#️-6-мережа-та-безпека)
+7. [🛡️ Network and Security](#️-6-network-and-security)
 8. [🐳 Docker / Podman](#-7-docker--podman)
-9. [📊 Моніторинг: диски, пам'ять, процеси 🆕](#-8-моніторинг-диски-память-процеси-)
-10. [👤 Користувачі та права 🆕](#-9-користувачі-та-права-)
-11. [🐍 Середовище розробки Python 🆕](#-10-середовище-розробки-python-)
-12. [🚑 SOS-сценарії](#-11-sos-сценарії)
-13. [🏷️ Індекс тегів](#️-індекс-тегів)
+9. [📊 Monitoring: Disks, Memory, Processes 🆕](#-8-monitoring-disks-memory-processes-)
+10. [👤 Users and Permissions 🆕](#-9-users-and-permissions-)
+11. [🐍 Python Dev Environment 🆕](#-10-python-dev-environment-)
+12. [🚑 SOS Scenarios](#-11-sos-scenarios)
+13. [🏷️ Tag Index](#️-tag-index)
+
 ---
- 
-## 🗺️ Карта системи
- 
+
+## 🗺️ System Map
+
 ```mermaid
 graph TD
-    HW["🖥️ Залізо<br/>ThinkPad · NVIDIA"] --> GRUB["🥾 GRUB2<br/>grubby"]
-    GRUB --> KERNEL["🧠 Ядро Linux<br/>+ initramfs (dracut)"]
-    KERNEL --> AK["🔧 akmods<br/>NVIDIA-модулі"]
-    KERNEL --> SD["⚙️ systemd<br/>служби · journald"]
+    HW["🖥️ Hardware<br/>ThinkPad · NVIDIA"] --> GRUB["🥾 GRUB2<br/>grubby"]
+    GRUB --> KERNEL["🧠 Linux Kernel<br/>+ initramfs (dracut)"]
+    KERNEL --> AK["🔧 akmods<br/>NVIDIA modules"]
+    KERNEL --> SD["⚙️ systemd<br/>services · journald"]
     SD --> NET["🌐 NetworkManager"]
     NET --> FW["🔥 firewalld"]
-    FW --> APPS["🚀 Додатки<br/>FastAPI · Django · Docker"]
+    FW --> APPS["🚀 Applications<br/>FastAPI · Django · Docker"]
     APPS --> SEL["🛡️ SELinux"]
-    FS["💾 Btrfs<br/>@ · @home"] --> SNAP["📸 Snapper<br/>сніпшоти"]
+    FS["💾 Btrfs<br/>@ · @home"] --> SNAP["📸 Snapper<br/>snapshots"]
     PKG["📦 DNF5 · Flatpak"] --> KERNEL
     PKG --> APPS
-    SNAP -. "відкат" .-> FS
+    SNAP -. "rollback" .-> FS
 ```
- 
+
 ---
- 
-## ⚡ Топ-15: команди на кожен день
- 
+
+## ⚡ Top 15: Everyday Commands
+
 ```bash
-sudo dnf upgrade --refresh              # 🟡 оновити все
-dnf search <назва>                      # 🟢 знайти пакет
-sudo dnf install <пакет>                # 🟡 встановити
-sudo dnf remove <пакет>                 # 🟡 видалити
-sudo snapper -c root create -d "Перед змінами"   # 🟢 сніпшот
-snapper ls                              # 🟢 список сніпшотів
-systemctl status <служба>               # 🟢 стан служби
-sudo systemctl enable --now <служба>    # 🟡 автозапуск + старт
-journalctl -b -p err                    # 🟢 помилки з поточного завантаження
-sudo firewall-cmd --list-all            # 🟢 правила фаєрвола
-df -h                                   # 🟢 вільне місце
-sudo btrfs filesystem usage /           # 🟢 реальне місце на Btrfs
-docker ps -a                            # 🟢 усі контейнери
-sudo dnf history                        # 🟢 історія транзакцій
-sestatus                                # 🟢 режим SELinux
+sudo dnf upgrade --refresh              # 🟡 update everything
+dnf search <name>                       # 🟢 find a package
+sudo dnf install <package>              # 🟡 install
+sudo dnf remove <package>               # 🟡 remove
+sudo snapper -c root create -d "Before changes"   # 🟢 snapshot
+snapper ls                              # 🟢 list snapshots
+systemctl status <service>              # 🟢 service status
+sudo systemctl enable --now <service>   # 🟡 autostart + start now
+journalctl -b -p err                    # 🟢 errors from the current boot
+sudo firewall-cmd --list-all            # 🟢 firewall rules
+df -h                                   # 🟢 free space
+sudo btrfs filesystem usage /           # 🟢 real space usage on Btrfs
+docker ps -a                            # 🟢 all containers
+sudo dnf history                        # 🟢 transaction history
+sestatus                                # 🟢 SELinux mode
 ```
- 
+
 > [!IMPORTANT]
-> **Золоте правило перед оновленням ядра, драйверів чи великим `dnf upgrade`:** зроби сніпшот. Це 3 секунди проти 3 годин відновлення.
- 
+> **Golden rule before a kernel update, driver update, or a big `dnf upgrade`:** take a snapshot. That's 3 seconds versus 3 hours of recovery.
+
 ---
- 
-# 📦 1. Пакети та оновлення (DNF5)
- 
+
+# 📦 1. Packages and Updates (DNF5)
+
 ```mermaid
 graph LR
-    U["👤 Ти"] --> D["📦 DNF5"]
-    D --> F["Fedora<br/>офіційні"]
+    U["👤 You"] --> D["📦 DNF5"]
+    D --> F["Fedora<br/>official"]
     D --> R["RPM Fusion<br/>free · nonfree"]
-    D --> C["COPR<br/>спільнота"]
+    D --> C["COPR<br/>community"]
     D --> VL["🔒 versionlock"]
     D --> H["🕘 history"]
-    F --> S["✅ Система"]
+    F --> S["✅ System"]
     R --> S
     C --> S
 ```
- 
-## 🔹 Базові операції
+
+## 🔹 Basic Operations
 `#dnf` `#packages` `#update`
- 
-| Дія | Команда |
+
+| Action | Command |
 |---|---|
-| 🟡 Оновити систему | `sudo dnf upgrade --refresh` |
-| 🟢 Знайти пакет | `dnf search <слово>` |
-| 🟢 Інформація про пакет | `dnf info <пакет>` |
-| 🟡 Встановити | `sudo dnf install <пакет>` |
-| 🟡 Видалити | `sudo dnf remove <пакет>` |
-| 🟡 Видалити сиріт-залежності 🆕 | `sudo dnf autoremove` |
-| 🟡 Перевстановити 🆕 | `sudo dnf reinstall <пакет>` |
-| 🟡 Відкотити версію пакета 🆕 | `sudo dnf downgrade <пакет>` |
-| 🟢 Який пакет дає файл/команду? 🆕 | `dnf provides */<назва_файлу>` |
-| 🟢 Список встановлених 🆕 | `dnf list --installed` |
-| 🟢 Є оновлення? 🆕 | `dnf check-upgrade` |
-| 🟡 Очистити кеш 🆕 | `sudo dnf clean all` |
-| 🟡 Встановити групу пакетів 🆕 | `sudo dnf group install development-tools` |
-| 🟢 Чи потрібне перезавантаження? 🆕 | `sudo dnf needs-restarting -r` |
- 
-> 💡 Ключ `--refresh` примусово оновлює метадані. Корисно після додавання репозиторію.
- 
-## 🔹 Репозиторії: RPM Fusion та COPR
+| 🟡 Update the system | `sudo dnf upgrade --refresh` |
+| 🟢 Search for a package | `dnf search <keyword>` |
+| 🟢 Package info | `dnf info <package>` |
+| 🟡 Install | `sudo dnf install <package>` |
+| 🟡 Remove | `sudo dnf remove <package>` |
+| 🟡 Remove orphaned dependencies 🆕 | `sudo dnf autoremove` |
+| 🟡 Reinstall 🆕 | `sudo dnf reinstall <package>` |
+| 🟡 Downgrade a package version 🆕 | `sudo dnf downgrade <package>` |
+| 🟢 Which package provides a file/command? 🆕 | `dnf provides */<file_name>` |
+| 🟢 List installed packages 🆕 | `dnf list --installed` |
+| 🟢 Are updates available? 🆕 | `dnf check-upgrade` |
+| 🟡 Clean the cache 🆕 | `sudo dnf clean all` |
+| 🟡 Install a package group 🆕 | `sudo dnf group install development-tools` |
+| 🟢 Is a reboot needed? 🆕 | `sudo dnf needs-restarting -r` |
+
+> 💡 The `--refresh` flag forces a metadata refresh. Useful after adding a repository.
+
+## 🔹 Repositories: RPM Fusion and COPR
 `#repos` `#rpmfusion` `#copr`
- 
+
 ```bash
-# 🟢 Підключені репозиторії
+# 🟢 Enabled repositories
 dnf repolist
- 
-# 🟡 Підключити RPM Fusion (free + nonfree) 🆕
+
+# 🟡 Enable RPM Fusion (free + nonfree) 🆕
 sudo dnf install \
   https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm \
   https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
- 
-# 🟡 Підключити COPR
-sudo dnf copr enable <користувач>/<репозиторій>
- 
-# 🟡 Вимкнути COPR 🆕
-sudo dnf copr disable <користувач>/<репозиторій>
+
+# 🟡 Enable a COPR repository
+sudo dnf copr enable <user>/<repository>
+
+# 🟡 Disable a COPR repository 🆕
+sudo dnf copr disable <user>/<repository>
 ```
- 
+
 <details>
-<summary>📄 Приклад виводу <code>dnf repolist</code></summary>
+<summary>📄 Example output of <code>dnf repolist</code></summary>
+
 ```text
 repo id                    repo name
 fedora                     Fedora 44 - x86_64
@@ -157,211 +161,212 @@ rpmfusion-free             RPM Fusion for Fedora 44 - Free
 rpmfusion-nonfree          RPM Fusion for Fedora 44 - Nonfree
 ```
 </details>
+
 > [!WARNING]
-> COPR це збірки спільноти без гарантій. Підключай лише те, чому довіряєш, і відстежуй що саме встановлюєш.
- 
-## 🔹 Versionlock та історія
+> COPR repositories are community builds with no guarantees. Only enable what you trust, and keep track of what you install.
+
+## 🔹 Versionlock and History
 `#versionlock` `#history`
- 
+
 ```bash
-sudo dnf versionlock add <пакет>        # 🟡 заморозити версію (kernel, akmod-nvidia)
-dnf versionlock list                    # 🟢 що заморожено
-sudo dnf versionlock delete <пакет>     # 🟡 розморозити
- 
-dnf history                             # 🟢 нумерований список транзакцій
-dnf history info <номер>                # 🟢 що саме змінила транзакція 🆕
-sudo dnf history undo <номер>           # 🔴 скасувати транзакцію
+sudo dnf versionlock add <package>      # 🟡 freeze a version (kernel, akmod-nvidia)
+dnf versionlock list                    # 🟢 what is frozen
+sudo dnf versionlock delete <package>   # 🟡 unfreeze
+
+dnf history                             # 🟢 numbered list of transactions
+dnf history info <number>               # 🟢 what exactly a transaction changed 🆕
+sudo dnf history undo <number>          # 🔴 undo a transaction
 ```
- 
-> 💡 Якщо плагін versionlock не знайдено: `sudo dnf install python3-dnf-plugin-versionlock` (DNF4) або `sudo dnf install dnf5-plugins` (DNF5).
- 
-## 🔹 Перехід на нову версію Fedora 🆕
+
+> 💡 If the versionlock plugin is missing: `sudo dnf install python3-dnf-plugin-versionlock` (DNF4) or `sudo dnf install dnf5-plugins` (DNF5).
+
+## 🔹 Upgrading to a New Fedora Release 🆕
 `#upgrade` `#release`
- 
+
 ```mermaid
 graph LR
-    A["1️⃣ Сніпшот"] --> B["2️⃣ dnf upgrade --refresh"]
-    B --> C["3️⃣ Перезавантаження"]
+    A["1️⃣ Snapshot"] --> B["2️⃣ dnf upgrade --refresh"]
+    B --> C["3️⃣ Reboot"]
     C --> D["4️⃣ system-upgrade download"]
     D --> E["5️⃣ offline reboot"]
-    E --> F["✅ Нова версія"]
+    E --> F["✅ New release"]
 ```
- 
+
 ```bash
-sudo snapper -c root create -d "Перед апгрейдом Fedora"
+sudo snapper -c root create -d "Before Fedora upgrade"
 sudo dnf upgrade --refresh
 sudo reboot
 sudo dnf system-upgrade download --releasever=<N>
 sudo dnf offline reboot
 ```
- 
+
 > [!NOTE]
-> Заздалегідь перевір сумісність драйвера NVIDIA з новою версією та які COPR-репозиторії у тебе підключені: вони найчастіше ламають апгрейд.
- 
+> Check in advance that the NVIDIA driver is compatible with the new release and which COPR repositories you have enabled: they are the most common cause of broken upgrades.
+
 ---
- 
+
 # 📚 2. Flatpak 🆕
- 
+
 `#flatpak` `#apps`
- 
+
 ```bash
-flatpak remotes                          # 🟢 підключені джерела
-flatpak search <назва>                   # 🟢 пошук
-flatpak install flathub <app.id>         # 🟡 встановити
-flatpak list                             # 🟢 встановлене
-flatpak update                           # 🟡 оновити все
-flatpak uninstall <app.id>               # 🟡 видалити
-flatpak uninstall --unused               # 🟡 прибрати невикористані runtime
-flatpak run <app.id>                     # 🟢 запустити з терміналу
+flatpak remotes                          # 🟢 configured remotes
+flatpak search <name>                    # 🟢 search
+flatpak install flathub <app.id>         # 🟡 install
+flatpak list                             # 🟢 installed apps
+flatpak update                           # 🟡 update everything
+flatpak uninstall <app.id>               # 🟡 uninstall
+flatpak uninstall --unused               # 🟡 remove unused runtimes
+flatpak run <app.id>                     # 🟢 launch from the terminal
 ```
- 
+
 ---
- 
+
 # 💾 3. Btrfs + Snapper
- 
+
 ```mermaid
 graph TD
-    D["💽 Диск"] --> B["Btrfs"]
+    D["💽 Disk"] --> B["Btrfs"]
     B --> R["@ → /"]
     B --> H["@home → /home"]
     B --> SN[".snapshots"]
     R --> SNAP["📸 Snapper"]
     SNAP --> S1["#1 pre-update"]
     SNAP --> S2["#2 post-update"]
-    SNAP --> S3["#3 вручну · important"]
-    B --> M["🧹 Обслуговування"]
-    M --> SC["scrub<br/>цілісність"]
-    M --> BL["balance<br/>чанки"]
-    M --> DF["defrag<br/>фрагментація"]
+    SNAP --> S3["#3 manual · important"]
+    B --> M["🧹 Maintenance"]
+    M --> SC["scrub<br/>integrity"]
+    M --> BL["balance<br/>chunks"]
+    M --> DF["defrag<br/>fragmentation"]
 ```
- 
-## 🔹 Субтоми
+
+## 🔹 Subvolumes
 `#btrfs` `#subvolumes`
- 
+
 ```bash
-sudo btrfs subvolume list /                  # 🟢 усі субтоми з ID
-sudo btrfs subvolume create /шлях/субтому    # 🟡 створити
-sudo btrfs subvolume delete /шлях/субтому    # 🔴 видалити з даними
-sudo btrfs subvolume show /                  # 🟢 деталі субтому 🆕
+sudo btrfs subvolume list /                  # 🟢 all subvolumes with IDs
+sudo btrfs subvolume create /path/to/subvolume   # 🟡 create
+sudo btrfs subvolume delete /path/to/subvolume   # 🔴 delete along with its data
+sudo btrfs subvolume show /                  # 🟢 subvolume details 🆕
 ```
- 
-> 💡 Бази даних (PostgreSQL) і кеш Docker краще винести в окремий субтом, щоб вони не потрапляли у сніпшоти й не роздували їх.
-> Для таких директорій також корисний `chattr +C <папка>` (вимкнути Copy-on-Write) **до** створення файлів усередині.
- 
-## 🔹 Сніпшоти Snapper
+
+> 💡 Databases (PostgreSQL) and the Docker cache are better placed in a separate subvolume so they don't end up in snapshots and bloat them.
+> For such directories `chattr +C <folder>` (disable Copy-on-Write) is also useful, **before** creating any files inside.
+
+## 🔹 Snapper Snapshots
 `#snapper` `#snapshots` `#recovery`
- 
-| Дія | Команда |
+
+| Action | Command |
 |---|---|
-| 🟢 Список | `snapper ls` |
-| 🟢 Створити ручний | `sudo snapper -c root create --type single -d "Опис"` |
-| 🟢 Що змінилось між знімками 🆕 | `sudo snapper -c root status 5..8` |
-| 🟢 Diff конкретного файлу 🆕 | `sudo snapper -c root diff 5..8 /etc/fstab` |
-| 🟡 Повернути файли | `sudo snapper -c root undochange 5..8` |
-| 🔴 Повний відкат | `sudo snapper --ambit classic rollback <номер>` |
-| 🔴 Видалити знімок 🆕 | `sudo snapper -c root delete <номер>` |
-| 🟡 Позначити важливим | `sudo snapper modify -u important=yes <номер>` |
- 
+| 🟢 List | `snapper ls` |
+| 🟢 Create a manual snapshot | `sudo snapper -c root create --type single -d "Description"` |
+| 🟢 What changed between snapshots 🆕 | `sudo snapper -c root status 5..8` |
+| 🟢 Diff of a specific file 🆕 | `sudo snapper -c root diff 5..8 /etc/fstab` |
+| 🟡 Restore files | `sudo snapper -c root undochange 5..8` |
+| 🔴 Full rollback | `sudo snapper --ambit classic rollback <number>` |
+| 🔴 Delete a snapshot 🆕 | `sudo snapper -c root delete <number>` |
+| 🟡 Mark as important | `sudo snapper modify -u important=yes <number>` |
+
 ```mermaid
 graph LR
-    P["Проблема після оновлення"] --> Q{"Що зламано?"}
-    Q -->|"1-2 файли"| U["undochange"]
-    Q -->|"вся система"| R["Завантаж знімок з GRUB<br/>→ rollback"]
+    P["Problem after an update"] --> Q{"What is broken?"}
+    Q -->|"1-2 files"| U["undochange"]
+    Q -->|"whole system"| R["Boot a snapshot from GRUB<br/>→ rollback"]
     U --> OK["✅"]
     R --> OK
 ```
- 
+
 > [!WARNING]
-> **Rollback** створює новий субтом і робить його кореневим. Після нього обов'язково перезавантаж ПК. Команда коректна лише для сумісної схеми субтомів Snapper. Якщо система встановлена зі стандартною розміткою Fedora, надійніше відкочуватися через завантаження знімка з меню GRUB.
- 
-## 🔹 Ліміти та очищення
+> **Rollback** creates a new subvolume and makes it the root. Reboot the PC afterwards. The command only works correctly with a Snapper-compatible subvolume layout. If the system was installed with the standard Fedora layout, it is more reliable to roll back by booting a snapshot from the GRUB menu.
+
+## 🔹 Limits and Cleanup
 `#snapper` `#cleanup`
- 
+
 ```bash
 sudo nano /etc/snapper/configs/root
 # NUMBER_LIMIT="10"
 # NUMBER_LIMIT_IMPORTANT="0"
- 
-sudo snapper -c root cleanup number      # 🟡 примусове очищення за лімітом
-sudo snapper -c root cleanup timeline    # 🟡 очищення за часовою шкалою
+
+sudo snapper -c root cleanup number      # 🟡 force cleanup by number limit
+sudo snapper -c root cleanup timeline    # 🟡 cleanup by timeline
 ```
- 
-## 🔹 Обслуговування простору
+
+## 🔹 Space Maintenance
 `#maintenance` `#scrub` `#balance`
- 
-| Операція | Команда | Навіщо |
+
+| Operation | Command | Why |
 |---|---|---|
-| 🟢 Scrub | `sudo btrfs scrub start /` | перевірка контрольних сум, виявляє bit rot |
-| 🟢 Статус scrub | `sudo btrfs scrub status /` | прогрес і кількість помилок |
-| 🟡 Balance | `sudo btrfs balance start -dusage=10 /` | звільнити напівпорожні чанки, лікує хибне «No space left» |
-| 🟡 Defrag | `sudo btrfs filesystem defragment -r -v /шлях` | дефрагментація (не роби на `/` без потреби) |
-| 🟢 Реальне заняте місце 🆕 | `sudo btrfs filesystem usage /` | точніше за `df` |
-| 🟢 Лічильники помилок 🆕 | `sudo btrfs device stats /` | помилки читання/запису/corruption |
- 
+| 🟢 Scrub | `sudo btrfs scrub start /` | verifies checksums, detects bit rot |
+| 🟢 Scrub status | `sudo btrfs scrub status /` | progress and number of errors |
+| 🟡 Balance | `sudo btrfs balance start -dusage=10 /` | frees half-empty chunks, fixes false "No space left" |
+| 🟡 Defrag | `sudo btrfs filesystem defragment -r -v /path` | defragmentation (don't run on `/` without a reason) |
+| 🟢 Real space used 🆕 | `sudo btrfs filesystem usage /` | more accurate than `df` |
+| 🟢 Error counters 🆕 | `sudo btrfs device stats /` | read/write/corruption errors |
+
 > [!CAUTION]
-> Defrag ламає спільні блоки (reflink) між сніпшотами, тому місце може різко збільшитись. Для SSD зазвичай не потрібен.
- 
+> Defrag breaks shared blocks (reflinks) between snapshots, so disk usage can jump sharply. It is usually not needed on SSDs.
+
 ---
- 
-# 🧠 4. Ядро, NVIDIA, GRUB
- 
+
+# 🧠 4. Kernel, NVIDIA, GRUB
+
 ```mermaid
 graph TD
-    G["🥾 GRUB2"] --> K["Ядро vmlinuz"]
+    G["🥾 GRUB2"] --> K["Kernel vmlinuz"]
     G --> I["initramfs (dracut)"]
     K --> A["🔧 akmods"]
     A --> N["🎮 NVIDIA kmod"]
-    A --> O["Інші модулі"]
+    A --> O["Other modules"]
     N --> X{"lsmod"}
-    X -->|"nvidia"| OK["✅ Працює"]
-    X -->|"nouveau"| BAD["❌ Збій збірки → akmods --force"]
+    X -->|"nvidia"| OK["✅ Working"]
+    X -->|"nouveau"| BAD["❌ Build failed → akmods --force"]
 ```
- 
-## 🔹 Модулі: akmods та dracut
+
+## 🔹 Modules: akmods and dracut
 `#kernel` `#akmods` `#dracut`
- 
+
 ```bash
-sudo akmods --force                       # 🟡 перезібрати модулі для поточного ядра
-sudo dracut --force                       # 🟡 перегенерувати initramfs
-lsmod | grep -e nvidia -e nouveau         # 🟢 який драйвер активний
-uname -r                                  # 🟢 версія поточного ядра 🆕
-rpm -q kernel                             # 🟢 встановлені ядра 🆕
+sudo akmods --force                       # 🟡 rebuild modules for the current kernel
+sudo dracut --force                       # 🟡 regenerate initramfs
+lsmod | grep -e nvidia -e nouveau         # 🟢 which driver is active
+uname -r                                  # 🟢 current kernel version 🆕
+rpm -q kernel                             # 🟢 installed kernels 🆕
 ```
- 
-## 🔹 NVIDIA: перевірка та діагностика
+
+## 🔹 NVIDIA: Checks and Diagnostics
 `#nvidia` `#gpu` `#troubleshooting`
- 
+
 ```bash
-modinfo -F version nvidia                 # 🟢 версія зібраного модуля
-systemctl status akmods                   # 🟢 лог збірки
-nvidia-smi                                # 🟢 стан GPU, температура, процеси 🆕
-rpm -qa | grep -i nvidia                  # 🟢 які пакети NVIDIA стоять 🆕
-sudo dnf install kernel-devel             # 🟡 заголовки, без них akmods не збере модуль 🆕
+modinfo -F version nvidia                 # 🟢 version of the built module
+systemctl status akmods                   # 🟢 build log
+nvidia-smi                                # 🟢 GPU state, temperature, processes 🆕
+rpm -qa | grep -i nvidia                  # 🟢 which NVIDIA packages are installed 🆕
+sudo dnf install kernel-devel             # 🟡 headers, akmods can't build the module without them 🆕
 ```
- 
+
 > [!TIP]
-> **Правило безпечного оновлення NVIDIA:** після `dnf upgrade`, що чіпає ядро чи драйвер, **не перезавантажуйся одразу**. Зачекай 3-5 хвилин (поки `akmods` збере модуль) і перевір `modinfo -F version nvidia`.
- 
+> **Safe NVIDIA update rule:** after a `dnf upgrade` that touches the kernel or the driver, **don't reboot right away**. Wait 3-5 minutes (while `akmods` builds the module) and check `modinfo -F version nvidia`.
+
 > [!NOTE]
-> Якщо увімкнений **Secure Boot**, неподписаний модуль NVIDIA не завантажиться. Перевірка: `mokutil --sb-state`. Для підпису використовується `kmodgenkey` + `mokutil --import`.
- 
-## 🔹 GRUB2 та параметри ядра
+> If **Secure Boot** is enabled, an unsigned NVIDIA module will not load. Check with `mokutil --sb-state`. Signing uses `kmodgenkey` + `mokutil --import`.
+
+## 🔹 GRUB2 and Kernel Parameters
 `#grub` `#bootloader`
- 
+
 ```bash
-sudo grubby --info=ALL                                    # 🟢 усі ядра та аргументи
-sudo grubby --default-kernel                              # 🟢 ядро за замовчуванням 🆕
-sudo grubby --update-kernel=ALL --args="nvidia-drm.modeset=1"   # 🟡 додати параметр
-sudo grubby --update-kernel=ALL --remove-args="nvidia-drm.modeset=1"   # 🟡 прибрати
-sudo grub2-mkconfig -o /boot/grub2/grub.cfg               # 🟡 перегенерувати конфіг
+sudo grubby --info=ALL                                    # 🟢 all kernels and their arguments
+sudo grubby --default-kernel                              # 🟢 default kernel 🆕
+sudo grubby --update-kernel=ALL --args="nvidia-drm.modeset=1"   # 🟡 add a parameter
+sudo grubby --update-kernel=ALL --remove-args="nvidia-drm.modeset=1"   # 🟡 remove it
+sudo grub2-mkconfig -o /boot/grub2/grub.cfg               # 🟡 regenerate the config
 ```
- 
-> 💡 `nvidia-drm.modeset=1` потрібен для Wayland (KDE Plasma) на NVIDIA.
- 
+
+> 💡 `nvidia-drm.modeset=1` is required for Wayland (KDE Plasma) on NVIDIA.
+
 ---
- 
+
 # ⚙️ 5. Systemd
- 
+
 ```mermaid
 graph TD
     SD["systemd · PID 1"] --> A["docker.service"]
@@ -369,100 +374,101 @@ graph TD
     SD --> C["sshd.service"]
     SD --> T["⏰ *.timer"]
     SD --> J["📜 journald"]
-    A -. логи .-> J
-    B -. логи .-> J
-    C -. логи .-> J
+    A -. logs .-> J
+    B -. logs .-> J
+    C -. logs .-> J
 ```
- 
-## 🔹 Життєвий цикл служб
+
+## 🔹 Service Lifecycle
 `#systemd` `#services`
- 
-| Дія | Команда |
+
+| Action | Command |
 |---|---|
-| 🟢 Стан | `systemctl status <служба>` |
-| 🟡 Старт / стоп / рестарт 🆕 | `sudo systemctl start\|stop\|restart <служба>` |
-| 🟡 Перечитати конфіг без зупинки 🆕 | `sudo systemctl reload <служба>` |
-| 🟡 Автозапуск + старт | `sudo systemctl enable --now <служба>` |
-| 🟡 Вимкнути + зупинити | `sudo systemctl disable --now <служба>` |
-| 🔴 Заблокувати повністю | `sudo systemctl mask <служба>` |
-| 🟡 Розблокувати | `sudo systemctl unmask <служба>` |
-| 🟢 Усі служби, що впали 🆕 | `systemctl --failed` |
-| 🟡 Після правки unit-файлів 🆕 | `sudo systemctl daemon-reload` |
-| 🟢 Таймери 🆕 | `systemctl list-timers` |
- 
-## 🔹 Логи (journalctl)
+| 🟢 Status | `systemctl status <service>` |
+| 🟡 Start / stop / restart 🆕 | `sudo systemctl start\|stop\|restart <service>` |
+| 🟡 Reload config without stopping 🆕 | `sudo systemctl reload <service>` |
+| 🟡 Autostart + start now | `sudo systemctl enable --now <service>` |
+| 🟡 Disable + stop | `sudo systemctl disable --now <service>` |
+| 🔴 Block completely | `sudo systemctl mask <service>` |
+| 🟡 Unblock | `sudo systemctl unmask <service>` |
+| 🟢 All failed services 🆕 | `systemctl --failed` |
+| 🟡 After editing unit files 🆕 | `sudo systemctl daemon-reload` |
+| 🟢 Timers 🆕 | `systemctl list-timers` |
+
+## 🔹 Logs (journalctl)
 `#journalctl` `#logs`
- 
+
 ```bash
-journalctl -u <служба> -e                 # 🟢 логи служби з кінця
-journalctl -f                             # 🟢 живий потік
-journalctl -b -p err                      # 🟢 помилки з поточного завантаження
-journalctl -b -1                          # 🟢 попереднє завантаження (після збою!) 🆕
-journalctl -k                             # 🟢 лише повідомлення ядра (dmesg) 🆕
-journalctl --since "1 hour ago"           # 🟢 за останню годину 🆕
-journalctl --disk-usage                   # 🟢 скільки місця займають логи 🆕
-sudo journalctl --vacuum-size=500M        # 🟡 обмежити розмір логів 🆕
+journalctl -u <service> -e                # 🟢 service logs from the end
+journalctl -f                             # 🟢 live stream
+journalctl -b -p err                      # 🟢 errors from the current boot
+journalctl -b -1                          # 🟢 previous boot (after a crash!) 🆕
+journalctl -k                             # 🟢 kernel messages only (dmesg) 🆕
+journalctl --since "1 hour ago"           # 🟢 for the last hour 🆕
+journalctl --disk-usage                   # 🟢 how much space logs take 🆕
+sudo journalctl --vacuum-size=500M        # 🟡 limit log size 🆕
 ```
- 
-## 🔹 Аналіз завантаження 🆕
- 
+
+## 🔹 Boot Analysis 🆕
+
 ```bash
-systemd-analyze                           # 🟢 загальний час старту
-systemd-analyze blame                     # 🟢 найповільніші служби
-systemd-analyze critical-chain            # 🟢 ланцюг, що гальмує старт
+systemd-analyze                           # 🟢 total boot time
+systemd-analyze blame                     # 🟢 slowest services
+systemd-analyze critical-chain            # 🟢 the chain slowing down boot
 ```
- 
+
 ---
- 
-# 🛡️ 6. Мережа та безпека
- 
+
+# 🛡️ 6. Network and Security
+
 ```mermaid
 graph TD
-    N["🌍 Зовнішня мережа"] --> NM["NetworkManager"]
+    N["🌍 External network"] --> NM["NetworkManager"]
     NM --> FW{"🔥 firewalld"}
-    FW -->|"порт відкритий"| APP["🚀 FastAPI / Django :8000"]
-    FW -->|"порт закритий"| DROP["🚫 DROP"]
+    FW -->|"port open"| APP["🚀 FastAPI / Django :8000"]
+    FW -->|"port closed"| DROP["🚫 DROP"]
     APP --> SE{"🛡️ SELinux"}
-    SE -->|"контекст ОК"| FS["📁 Файли / БД"]
-    SE -->|"порушення політики"| BLK["⛔ Доступ заблоковано"]
+    SE -->|"context OK"| FS["📁 Files / DB"]
+    SE -->|"policy violation"| BLK["⛔ Access blocked"]
 ```
- 
+
 ## 🔹 Firewalld
 `#firewalld` `#ports`
- 
+
 ```bash
-sudo firewall-cmd --state                                   # 🟢 чи працює 🆕
-sudo firewall-cmd --list-all                                # 🟢 активна зона й правила
-sudo firewall-cmd --get-active-zones                        # 🟢 які зони активні 🆕
- 
-sudo firewall-cmd --permanent --add-port=8000/tcp           # 🟡 відкрити порт
-sudo firewall-cmd --permanent --remove-port=8000/tcp        # 🟡 закрити порт
-sudo firewall-cmd --permanent --add-service=http            # 🟡 відкрити сервіс за назвою 🆕
-sudo firewall-cmd --reload                                  # 🟡 застосувати
+sudo firewall-cmd --state                                   # 🟢 is it running 🆕
+sudo firewall-cmd --list-all                                # 🟢 active zone and rules
+sudo firewall-cmd --get-active-zones                        # 🟢 which zones are active 🆕
+
+sudo firewall-cmd --permanent --add-port=8000/tcp           # 🟡 open a port
+sudo firewall-cmd --permanent --remove-port=8000/tcp        # 🟡 close a port
+sudo firewall-cmd --permanent --add-service=http            # 🟡 open a service by name 🆕
+sudo firewall-cmd --reload                                  # 🟡 apply
 ```
- 
+
 > [!WARNING]
-> Забув `--permanent` → правило зникне після перезавантаження. Забув `--reload` → правило не почне діяти.
-> 💡 Для швидкого тесту без `--permanent` правило діє до першого `reload`.
- 
-## 🔹 Мережеві інтерфейси та діагностика
+> Forgot `--permanent` → the rule disappears after a reboot. Forgot `--reload` → the rule doesn't take effect.
+> 💡 For a quick test without `--permanent`, the rule lasts until the first `reload`.
+
+## 🔹 Network Interfaces and Diagnostics
 `#networkmanager` `#nmcli` `#network`
- 
+
 ```bash
-nmcli device status                       # 🟢 усі адаптери
-nmcli connection show                     # 🟢 збережені профілі 🆕
-sudo nmcli connection up "<профіль>"      # 🟡 перепідключити
-nmcli device wifi list                    # 🟢 доступні Wi-Fi 🆕
-nmcli device wifi connect "<SSID>" --ask  # 🟡 підключитись до Wi-Fi 🆕
-nmcli radio                               # 🟢 стан Wi-Fi/WWAN радіо 🆕
-ip -br a                                  # 🟢 коротко: інтерфейси та IP 🆕
-ss -tulpn                                 # 🟢 які порти слухає система 🆕
-ping -c 4 1.1.1.1                         # 🟢 є інтернет? 🆕
-resolvectl status                         # 🟢 DNS-налаштування 🆕
+nmcli device status                       # 🟢 all adapters
+nmcli connection show                     # 🟢 saved profiles 🆕
+sudo nmcli connection up "<profile>"      # 🟡 reconnect
+nmcli device wifi list                    # 🟢 available Wi-Fi networks 🆕
+nmcli device wifi connect "<SSID>" --ask  # 🟡 connect to Wi-Fi 🆕
+nmcli radio                               # 🟢 Wi-Fi/WWAN radio state 🆕
+ip -br a                                  # 🟢 brief: interfaces and IPs 🆕
+ss -tulpn                                 # 🟢 which ports the system is listening on 🆕
+ping -c 4 1.1.1.1                         # 🟢 is the internet up? 🆕
+resolvectl status                         # 🟢 DNS settings 🆕
 ```
- 
+
 <details>
-<summary>📄 Приклад виводу <code>nmcli device status</code></summary>
+<summary>📄 Example output of <code>nmcli device status</code></summary>
+
 ```text
 DEVICE     TYPE      STATE                   CONNECTION
 enp4s0     ethernet  connected               Wired connection 1
@@ -471,319 +477,325 @@ docker0    bridge    connected (externally)  docker0
 lo         loopback  unmanaged               --
 ```
 </details>
+
 ## 🔹 SSH 🆕
 `#ssh` `#security`
- 
+
 ```bash
-ssh-keygen -t ed25519 -C "serhii@pc"      # 🟢 згенерувати ключ
-ssh-copy-id user@server                   # 🟡 додати ключ на сервер
-ssh user@server                           # 🟢 підключитись
-sudo systemctl enable --now sshd          # 🟡 увімкнути SSH-сервер
+ssh-keygen -t ed25519 -C "serhii@pc"      # 🟢 generate a key
+ssh-copy-id user@server                   # 🟡 add the key to a server
+ssh user@server                           # 🟢 connect
+sudo systemctl enable --now sshd          # 🟡 enable the SSH server
 ```
- 
+
 ## 🔹 SELinux
 `#selinux` `#security`
- 
+
 ```bash
-sestatus                                  # 🟢 режим: Enforcing / Permissive
-sudo setenforce 0                         # 🟡 тимчасово Permissive (лише для діагностики!) 🆕
-sudo setenforce 1                         # 🟡 повернути Enforcing 🆕
- 
-# 🟡 дозволити вебсервісу читати папку проекту (лікує 403)
-sudo semanage fcontext -a -t httpd_sys_content_t "/шлях/проекту(/.*)?"
-sudo restorecon -Rv /шлях/проекту
- 
-# 🟡 дозволити Nginx ходити на бекенд/БД/зовнішні API
+sestatus                                  # 🟢 mode: Enforcing / Permissive
+sudo setenforce 0                         # 🟡 temporarily Permissive (diagnostics only!) 🆕
+sudo setenforce 1                         # 🟡 back to Enforcing 🆕
+
+# 🟡 allow a web service to read the project folder (fixes 403)
+sudo semanage fcontext -a -t httpd_sys_content_t "/path/to/project(/.*)?"
+sudo restorecon -Rv /path/to/project
+
+# 🟡 allow Nginx to connect to a backend/DB/external APIs
 sudo setsebool -P httpd_can_network_connect 1
 ```
- 
-### 🔍 Якщо щось «просто не працює», а помилок немає 🆕
- 
+
+### 🔍 When something "just doesn't work" and there are no errors 🆕
+
 ```mermaid
 graph LR
-    A["Служба не працює<br/>права нібито ОК"] --> B["setenforce 0"]
-    B --> C{"Запрацювало?"}
-    C -->|"так"| D["Винен SELinux"]
-    C -->|"ні"| E["Шукай в іншому місці"]
+    A["Service not working<br/>permissions look fine"] --> B["setenforce 0"]
+    B --> C{"Does it work now?"}
+    C -->|"yes"| D["SELinux is the culprit"]
+    C -->|"no"| E["Look elsewhere"]
     D --> F["sudo ausearch -m avc -ts recent"]
     F --> G["sudo dnf install setroubleshoot-server<br/>sudo sealert -a /var/log/audit/audit.log"]
-    G --> H["Виправ контекст або boolean<br/>і поверни setenforce 1"]
+    G --> H["Fix the context or boolean<br/>then setenforce 1"]
 ```
- 
+
 ```bash
-sudo ausearch -m avc -ts recent           # 🟢 останні відмови SELinux
-ls -Z /шлях                               # 🟢 контекст файлів
-ps -eZ | grep <процес>                    # 🟢 контекст процесу
-getsebool -a | grep httpd                 # 🟢 boolean-и для вебсервера
+sudo ausearch -m avc -ts recent           # 🟢 recent SELinux denials
+ls -Z /path                               # 🟢 file contexts
+ps -eZ | grep <process>                   # 🟢 process context
+getsebool -a | grep httpd                 # 🟢 web server booleans
 ```
- 
+
 > [!CAUTION]
-> Ніколи не залишай `SELINUX=disabled`. Краще знайти причину і виправити контекст або boolean.
- 
+> Never leave `SELINUX=disabled`. It is better to find the cause and fix the context or boolean.
+
 ---
- 
+
 # 🐳 7. Docker / Podman
- 
+
 ```mermaid
 graph TD
     CLI["Docker / Podman CLI"] --> E["Container Engine"]
     E --> REG["☁️ Docker Hub"]
-    REG -- pull --> IMG["📦 Образи"]
-    IMG -- run --> CT["🧱 Контейнери"]
+    REG -- pull --> IMG["📦 Images"]
+    IMG -- run --> CT["🧱 Containers"]
     CT <--> V["💽 Volumes"]
-    CT <--> NET["🔗 Віртуальна мережа"]
+    CT <--> NET["🔗 Virtual network"]
 ```
- 
-## 🔹 Контейнери та образи
+
+## 🔹 Containers and Images
 `#docker` `#podman` `#containers`
- 
+
 ```bash
-docker ps -a                              # 🟢 усі контейнери
-docker images                             # 🟢 локальні образи 🆕
-docker pull <образ>                       # 🟡 завантажити образ 🆕
-docker logs -f <ім'я>                     # 🟢 логи в реальному часі
-docker exec -it <ім'я> bash               # 🟡 зайти всередину контейнера 🆕
-docker stats                              # 🟢 CPU/RAM контейнерів 🆕
-docker stop <ім'я> && docker rm <ім'я>    # 🟡 зупинити і видалити
+docker ps -a                              # 🟢 all containers
+docker images                             # 🟢 local images 🆕
+docker pull <image>                       # 🟡 download an image 🆕
+docker logs -f <name>                     # 🟢 live logs
+docker exec -it <name> bash               # 🟡 get a shell inside a container 🆕
+docker stats                              # 🟢 container CPU/RAM 🆕
+docker stop <name> && docker rm <name>    # 🟡 stop and remove
 ```
- 
+
 ```bash
-# 🟡 PostgreSQL для розробки (з томом, щоб дані не зникли)
+# 🟡 PostgreSQL for development (with a volume so data isn't lost)
 docker run -d --name pg-dev \
   -p 5432:5432 \
-  -e POSTGRES_PASSWORD=<пароль> \
+  -e POSTGRES_PASSWORD=<password> \
   -e POSTGRES_DB=mydb \
   -v pgdata:/var/lib/postgresql/data \
   postgres:15-alpine
 ```
- 
+
 > [!WARNING]
-> Без `-v` дані БД живуть лише всередині контейнера й зникають разом із ним. Реальні паролі не залишай у історії команд і не коміть у git.
- 
+> Without `-v`, DB data lives only inside the container and disappears with it. Don't leave real passwords in your shell history and don't commit them to git.
+
 <details>
-<summary>📄 Приклад виводу <code>docker ps -a</code></summary>
+<summary>📄 Example output of <code>docker ps -a</code></summary>
+
 ```text
 CONTAINER ID   IMAGE                COMMAND                  STATUS                  PORTS                    NAMES
 a1b2c3d4e5f6   postgres:15-alpine   "docker-entrypoint.s…"   Up 2 minutes            0.0.0.0:5432->5432/tcp   pg-dev
 9876543210ab   redis:alpine         "docker-entrypoint.s…"   Exited (0) 4 days ago                            redis-cache
 ```
 </details>
+
 ## 🔹 Docker Compose 🆕
 `#compose`
- 
+
 ```bash
-docker compose up -d                      # 🟡 підняти весь стек
-docker compose ps                         # 🟢 стан сервісів
-docker compose logs -f <сервіс>           # 🟢 логи сервісу
-docker compose down                       # 🟡 зупинити й видалити контейнери
-docker compose down -v                    # 🔴 + видалити томи (дані БД!)
-docker compose up -d --build              # 🟡 перебудувати образи й запустити
+docker compose up -d                      # 🟡 bring up the whole stack
+docker compose ps                         # 🟢 service status
+docker compose logs -f <service>          # 🟢 service logs
+docker compose down                       # 🟡 stop and remove containers
+docker compose down -v                    # 🔴 + remove volumes (DB data!)
+docker compose up -d --build              # 🟡 rebuild images and start
 ```
- 
-## 🔹 Особливості Fedora 🆕
- 
+
+## 🔹 Fedora Specifics 🆕
+
 ```bash
-sudo systemctl enable --now docker        # 🟡 запустити Docker-демон
-sudo usermod -aG docker $USER             # 🟡 працювати без sudo (потрібен перелогін)
+sudo systemctl enable --now docker        # 🟡 start the Docker daemon
+sudo usermod -aG docker $USER             # 🟡 use Docker without sudo (re-login required)
 ```
- 
-> 💡 У Fedora «з коробки» є **Podman**: безdemonний і rootless. Команди майже ті самі (`podman ps`, `podman run`, `podman logs`). Якщо SELinux блокує доступ до змонтованої папки, додай до тому суфікс `:Z`, наприклад `-v ./data:/data:Z`.
- 
-## 🔹 Очищення середовища
+
+> 💡 Fedora ships with **Podman** out of the box: daemonless and rootless. The commands are almost identical (`podman ps`, `podman run`, `podman logs`). If SELinux blocks access to a mounted folder, add the `:Z` suffix to the volume, e.g. `-v ./data:/data:Z`.
+
+## 🔹 Cleaning Up the Environment
 `#cleanup` `#prune`
- 
-| Рівень | Команда | Що видаляє |
+
+| Level | Command | What it removes |
 |---|---|---|
-| 🟡 М'яко | `docker image prune` | образи `<none>:<none>` |
-| 🟡 Помірно 🆕 | `docker container prune` | зупинені контейнери |
-| 🟢 Статистика 🆕 | `docker system df` | скільки місця займає Docker |
-| 🔴 Агресивно | `docker system prune -a --volumes` | усе невикористане, **включно з томами** |
- 
+| 🟡 Gentle | `docker image prune` | `<none>:<none>` images |
+| 🟡 Moderate 🆕 | `docker container prune` | stopped containers |
+| 🟢 Statistics 🆕 | `docker system df` | how much space Docker uses |
+| 🔴 Aggressive | `docker system prune -a --volumes` | everything unused, **including volumes** |
+
 ```bash
-docker stop $(docker ps -q)               # 🟡 зупинити всі активні контейнери
+docker stop $(docker ps -q)               # 🟡 stop all running containers
 ```
- 
+
 > [!CAUTION]
-> `--volumes` назавжди видаляє томи з даними. Спершу переконайся, що БД не потрібні.
- 
+> `--volumes` permanently deletes volumes with data. First make sure you don't need the databases.
+
 ---
- 
-# 📊 8. Моніторинг: диски, пам'ять, процеси 🆕
- 
+
+# 📊 8. Monitoring: Disks, Memory, Processes 🆕
+
 `#monitoring` `#disk` `#memory` `#process`
- 
-## 🔹 Диски та місце
- 
+
+## 🔹 Disks and Space
+
 ```bash
-df -h                                     # 🟢 вільне місце по розділах
-lsblk -f                                  # 🟢 диски, розділи, ФС, UUID
-du -sh * | sort -h                        # 🟢 що займає місце у поточній папці
-sudo du -xh / --max-depth=1 | sort -h     # 🟢 найбільші папки на кореневому розділі
-sudo smartctl -a /dev/nvme0n1             # 🟢 здоров'я диска (пакет smartmontools)
+df -h                                     # 🟢 free space per partition
+lsblk -f                                  # 🟢 disks, partitions, filesystems, UUIDs
+du -sh * | sort -h                        # 🟢 what takes space in the current folder
+sudo du -xh / --max-depth=1 | sort -h     # 🟢 biggest folders on the root partition
+sudo smartctl -a /dev/nvme0n1             # 🟢 disk health (smartmontools package)
 ```
- 
-## 🔹 Пам'ять і процесор
- 
+
+## 🔹 Memory and CPU
+
 ```bash
-free -h                                   # 🟢 RAM та swap
-htop                                      # 🟢 інтерактивний монітор (dnf install htop)
-top                                       # 🟢 вбудований монітор
-uptime                                    # 🟢 час роботи та навантаження
-sensors                                   # 🟢 температури (пакет lm_sensors)
+free -h                                   # 🟢 RAM and swap
+htop                                      # 🟢 interactive monitor (dnf install htop)
+top                                       # 🟢 built-in monitor
+uptime                                    # 🟢 uptime and load
+sensors                                   # 🟢 temperatures (lm_sensors package)
 ```
- 
-## 🔹 Процеси
- 
+
+## 🔹 Processes
+
 ```bash
-ps aux | grep <назва>                     # 🟢 знайти процес
-pgrep -a <назва>                          # 🟢 PID за назвою
-kill <PID>                                # 🟡 коректно завершити
-kill -9 <PID>                             # 🔴 примусово
-sudo lsof -i :8000                        # 🟢 хто тримає порт 8000
+ps aux | grep <name>                      # 🟢 find a process
+pgrep -a <name>                           # 🟢 PID by name
+kill <PID>                                # 🟡 terminate gracefully
+kill -9 <PID>                             # 🔴 force kill
+sudo lsof -i :8000                        # 🟢 who is holding port 8000
 ```
- 
-## 🔹 Інформація про залізо
- 
+
+## 🔹 Hardware Information
+
 ```bash
-hostnamectl                               # 🟢 ОС, ядро, хост
-lscpu                                     # 🟢 процесор
-lspci -k | grep -A3 -i vga                # 🟢 відеокарта та який драйвер її тримає
-lsusb                                     # 🟢 USB-пристрої
-sudo dmesg -T | tail -50                  # 🟢 останні повідомлення ядра
+hostnamectl                               # 🟢 OS, kernel, host
+lscpu                                     # 🟢 CPU
+lspci -k | grep -A3 -i vga                # 🟢 GPU and which driver holds it
+lsusb                                     # 🟢 USB devices
+sudo dmesg -T | tail -50                  # 🟢 latest kernel messages
 ```
- 
+
 ---
- 
-# 👤 9. Користувачі та права 🆕
- 
+
+# 👤 9. Users and Permissions 🆕
+
 `#users` `#permissions`
- 
+
 ```bash
-whoami                                    # 🟢 хто я
-id                                        # 🟢 мої групи
-sudo useradd -m -G wheel <ім'я>           # 🟡 новий користувач з правом sudo
-sudo passwd <ім'я>                        # 🟡 задати пароль
-sudo usermod -aG <група> <ім'я>           # 🟡 додати до групи
-sudo userdel -r <ім'я>                    # 🔴 видалити з домашньою папкою
+whoami                                    # 🟢 who am I
+id                                        # 🟢 my groups
+sudo useradd -m -G wheel <name>           # 🟡 new user with sudo rights
+sudo passwd <name>                        # 🟡 set a password
+sudo usermod -aG <group> <name>           # 🟡 add to a group
+sudo userdel -r <name>                    # 🔴 delete along with the home folder
 ```
- 
+
 ```bash
-ls -l                                     # 🟢 права
-chmod 640 файл                            # 🟡 власник rw, група r, інші нічого
-chmod +x скрипт.sh                        # 🟡 зробити виконуваним
-chown user:group файл                     # 🟡 змінити власника
+ls -l                                     # 🟢 permissions
+chmod 640 file                            # 🟡 owner rw, group r, others nothing
+chmod +x script.sh                        # 🟡 make executable
+chown user:group file                     # 🟡 change owner
 ```
- 
-| Права | Значення | Типове застосування |
+
+| Mode | Meaning | Typical use |
 |:---:|---|---|
-| `600` | власник читає/пише | ключі, `.env` |
-| `644` | власник пише, всі читають | звичайні файли |
-| `755` | власник усе, інші читають/виконують | скрипти, папки |
-| `700` | лише власник | приватні папки |
- 
+| `600` | owner reads/writes | keys, `.env` |
+| `644` | owner writes, everyone reads | regular files |
+| `755` | owner everything, others read/execute | scripts, folders |
+| `700` | owner only | private folders |
+
 ---
- 
-# 🐍 10. Середовище розробки Python 🆕
- 
+
+# 🐍 10. Python Dev Environment 🆕
+
 `#python` `#venv` `#backend`
- 
+
 ```bash
-python3 --version                         # 🟢 версія
-python3 -m venv .venv                     # 🟡 створити віртуальне оточення
-source .venv/bin/activate                 # 🟢 активувати
-pip install -r requirements.txt           # 🟡 залежності
-pip freeze > requirements.txt             # 🟡 зафіксувати залежності
-deactivate                                # 🟢 вийти з оточення
+python3 --version                         # 🟢 version
+python3 -m venv .venv                     # 🟡 create a virtual environment
+source .venv/bin/activate                 # 🟢 activate
+pip install -r requirements.txt           # 🟡 install dependencies
+pip freeze > requirements.txt             # 🟡 pin dependencies
+deactivate                                # 🟢 leave the environment
 ```
- 
+
 ```bash
-uvicorn main:app --reload --port 8000     # 🟢 FastAPI для розробки
-python manage.py runserver                # 🟢 Django для розробки
-python manage.py migrate                  # 🟡 застосувати міграції
+uvicorn main:app --reload --port 8000     # 🟢 FastAPI dev server
+python manage.py runserver                # 🟢 Django dev server
+python manage.py migrate                  # 🟡 apply migrations
 ```
- 
-> 💡 Хочеш звернутись до dev-сервера з іншого пристрою в мережі: запускай з `--host 0.0.0.0` і відкрий порт через firewalld (див. розділ 6). Не залишай такий порт відкритим назавжди.
- 
+
+> 💡 Want to reach the dev server from another device on the network: run it with `--host 0.0.0.0` and open the port via firewalld (see section 6). Don't leave such a port open permanently.
+
 ---
- 
-# 🚑 11. SOS-сценарії
- 
-## 🔥 Після оновлення чорний екран або немає NVIDIA
- 
+
+# 🚑 11. SOS Scenarios
+
+## 🔥 Black screen or no NVIDIA after an update
+
 ```mermaid
 graph TD
-    A["💥 Немає NVIDIA / низька роздільність"] --> B["lsmod \| grep -e nvidia -e nouveau"]
+    A["💥 No NVIDIA / low resolution"] --> B["lsmod: nvidia or nouveau?"]
     B --> C{"nouveau?"}
-    C -->|"так"| D["systemctl status akmods"]
+    C -->|"yes"| D["systemctl status akmods"]
     D --> E["sudo dnf install kernel-devel"]
     E --> F["sudo akmods --force"]
     F --> G["sudo dracut --force"]
     G --> H["reboot"]
-    C -->|"ні"| I["journalctl -b -p err"]
-    H --> J{"Не допомогло?"}
-    J -->|"так"| K["Завантаж попереднє ядро<br/>або сніпшот з меню GRUB"]
+    C -->|"no"| I["journalctl -b -p err"]
+    H --> J{"Didn't help?"}
+    J -->|"yes"| K["Boot the previous kernel<br/>or a snapshot from the GRUB menu"]
 ```
- 
-## 📸 Система зламана після оновлення
- 
+
+## 📸 System broken after an update
+
 ```mermaid
 graph TD
-    A["Система не завантажується / працює некоректно"] --> B["Меню GRUB → Snapshots"]
-    B --> C["Обери робочий знімок"]
-    C --> D{"Працює?"}
-    D -->|"так"| E["snapper rollback і reboot"]
-    D -->|"ні"| F["Обери інше ядро в GRUB"]
+    A["System won't boot / misbehaves"] --> B["GRUB menu → Snapshots"]
+    B --> C["Pick a working snapshot"]
+    C --> D{"Works?"}
+    D -->|"yes"| E["snapper rollback and reboot"]
+    D -->|"no"| F["Pick a different kernel in GRUB"]
 ```
- 
-## 💽 «No space left on device», хоча місце є
- 
+
+## 💽 "No space left on device" even though there is space
+
 ```bash
-sudo btrfs filesystem usage /             # 1. подивитись, скільки нерозмічених чанків
-sudo snapper -c root cleanup number       # 2. прибрати зайві сніпшоти
-sudo btrfs balance start -dusage=10 /     # 3. звільнити напівпорожні чанки
-docker system df                          # 4. перевірити, чи не зʼїв місце Docker
+sudo btrfs filesystem usage /             # 1. check how many unallocated chunks remain
+sudo snapper -c root cleanup number       # 2. remove excess snapshots
+sudo btrfs balance start -dusage=10 /     # 3. free half-empty chunks
+docker system df                          # 4. check whether Docker ate the space
 ```
- 
-## 🌐 Сервіс не відповідає ззовні
- 
+
+## 🌐 Service not reachable from outside
+
 ```mermaid
 graph LR
-    A["Сервіс недоступний"] --> B["1. systemctl status"]
-    B --> C["2. ss -tulpn<br/>слухає потрібний порт?"]
-    C --> D["3. firewall-cmd --list-all<br/>порт відкритий?"]
-    D --> E["4. ausearch -m avc<br/>SELinux блокує?"]
-    E --> F["5. journalctl -u служба -e"]
+    A["Service unreachable"] --> B["1. systemctl status"]
+    B --> C["2. ss -tulpn<br/>listening on the right port?"]
+    C --> D["3. firewall-cmd --list-all<br/>port open?"]
+    D --> E["4. ausearch -m avc<br/>SELinux blocking?"]
+    E --> F["5. journalctl -u service -e"]
 ```
- 
-## 📡 Wi-Fi чи клавіатура відвалились 🆕
- 
+
+## 📡 Wi-Fi or keyboard dropped out 🆕
+
 ```bash
-journalctl -b -1 -p warning               # 🟢 що писало ядро перед збоєм (попереднє завантаження)
-journalctl -k | grep -i -e rfkill -e iwlwifi -e firmware    # 🟢 помилки Wi-Fi та прошивки
-rfkill list                               # 🟢 чи не заблоковане радіо програмно/апаратно
-sudo dnf upgrade --refresh                # 🟡 свіжі прошивки та ядро
+journalctl -b -1 -p warning               # 🟢 what the kernel logged before the crash (previous boot)
+journalctl -k | grep -i -e rfkill -e iwlwifi -e firmware    # 🟢 Wi-Fi and firmware errors
+rfkill list                               # 🟢 is the radio blocked in software/hardware
+sudo dnf upgrade --refresh                # 🟡 fresh firmware and kernel
 ```
- 
+
 ---
- 
-# 🏷️ Індекс тегів
- 
-| Тег | Розділ |
+
+# 🏷️ Tag Index
+
+| Tag | Section |
 |---|---|
-| `#dnf` `#packages` `#repos` `#upgrade` | 📦 Пакети |
+| `#dnf` `#packages` `#repos` `#upgrade` | 📦 Packages |
 | `#flatpak` | 📚 Flatpak |
 | `#btrfs` `#snapper` `#snapshots` `#scrub` `#balance` | 💾 Btrfs |
-| `#kernel` `#akmods` `#dracut` `#nvidia` `#grub` | 🧠 Ядро |
+| `#kernel` `#akmods` `#dracut` `#nvidia` `#grub` | 🧠 Kernel |
 | `#systemd` `#services` `#journalctl` | ⚙️ Systemd |
-| `#firewalld` `#ports` `#nmcli` `#ssh` `#selinux` | 🛡️ Мережа |
-| `#docker` `#podman` `#compose` `#prune` | 🐳 Контейнери |
-| `#monitoring` `#disk` `#process` | 📊 Моніторинг |
-| `#users` `#permissions` | 👤 Користувачі |
+| `#firewalld` `#ports` `#nmcli` `#ssh` `#selinux` | 🛡️ Network |
+| `#docker` `#podman` `#compose` `#prune` | 🐳 Containers |
+| `#monitoring` `#disk` `#process` | 📊 Monitoring |
+| `#users` `#permissions` | 👤 Users |
 | `#python` `#venv` | 🐍 Python |
- 
+
 ---
- 
+
 <div align="center">
-**🧰 Порада:** тримай цей файл у git-репозиторії, і кожна нова корисна команда стане твоєю базою знань.
- 
-*Зроби сніпшот. Перевір двічі. Тоді тисни Enter.* 📸
+
+**🧰 Tip:** keep this file in a git repository, and every new useful command becomes part of your knowledge base.
+
+*Take a snapshot. Check twice. Then hit Enter.* 📸
+
+</div>

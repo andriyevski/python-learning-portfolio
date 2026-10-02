@@ -1,10 +1,10 @@
 <div align="center">
 
-# 🌿 GIT · ШПАРГАЛКА ДЛЯ РОБОТИ З ПРОЕКТАМИ
+# 🌿 GIT · PROJECT WORKFLOW CHEAT SHEET
 
-**Від першого коміту до розв'язання конфліктів і порятунку «втраченого» коду**
+**From your first commit to resolving conflicts and rescuing "lost" code**
 
-*Особистий довідник: знайшов → скопіював → виконав*
+*Personal reference: find → copy → run*
 
 ![Git](https://img.shields.io/badge/Git-2.x-F05032?logo=git&logoColor=white)
 ![GitHub](https://img.shields.io/badge/GitHub-Flow-181717?logo=github&logoColor=white)
@@ -14,110 +14,110 @@
 
 ---
 
-## 🧭 Як користуватися
+## 🧭 How to Use
 
-| Позначка | Значення |
+| Marker | Meaning |
 |:---:|---|
-| 🟢 | Безпечно, нічого не змінює або легко скасувати |
-| 🟡 | Змінює історію чи файли, перевір перед запуском |
-| 🔴 | Може незворотно втратити роботу, спершу створи резервну гілку |
-| 💡 | Корисна порада |
-| 🆕 | Додатково до базового набору |
+| 🟢 | Safe, changes nothing or is easy to undo |
+| 🟡 | Changes history or files, double-check before running |
+| 🔴 | Can irreversibly lose work, create a backup branch first |
+| 💡 | Useful tip |
+| 🆕 | Extra, beyond the basic set |
 
 > [!TIP]
-> Шукай команду через `Ctrl+F` за тегом, наприклад `#undo`, `#branch`, `#stash`.
-> `<...>` у командах означає, що значення потрібно підставити своє.
+> Search for a command with `Ctrl+F` by tag, e.g. `#undo`, `#branch`, `#stash`.
+> `<...>` in commands means you must substitute your own value.
 
 ---
 
-## 📑 Зміст
+## 📑 Table of Contents
 
-1. [⚡ Топ-15: команди на кожен день](#-топ-15-команди-на-кожен-день)
-2. [🔧 Початкове налаштування](#-1-початкове-налаштування)
-3. [🚀 Старт проєкту: init і clone](#-2-старт-проєкту-init-і-clone)
-4. [📝 Щоденний цикл: зміни → коміт](#-3-щоденний-цикл-зміни--коміт)
-5. [🌿 Гілки](#-4-гілки)
-6. [🔀 Merge, Rebase та конфлікти](#-5-merge-rebase-та-конфлікти)
-7. [☁️ Віддалені репозиторії](#️-6-віддалені-репозиторії)
-8. [🔍 Історія та пошук](#-7-історія-та-пошук)
-9. [⏪ Скасування та відновлення](#-8-скасування-та-відновлення)
-10. [📦 Stash: відкласти роботу](#-9-stash-відкласти-роботу)
-11. [🏷️ Теги та релізи](#️-10-теги-та-релізи)
-12. [🙈 .gitignore для Python-проєктів](#-11-gitignore-для-python-проєктів)
-13. [🤝 Командний процес (GitHub Flow)](#-12-командний-процес-github-flow)
-14. [🚑 SOS-сценарії](#-13-sos-сценарії)
-15. [🏷️ Індекс тегів](#️-індекс-тегів)
+1. [⚡ Top 15: Everyday Commands](#-top-15-everyday-commands)
+2. [🔧 Initial Setup](#-1-initial-setup)
+3. [🚀 Starting a Project: init and clone](#-2-starting-a-project-init-and-clone)
+4. [📝 Daily Cycle: Changes → Commit](#-3-daily-cycle-changes--commit)
+5. [🌿 Branches](#-4-branches)
+6. [🔀 Merge, Rebase, and Conflicts](#-5-merge-rebase-and-conflicts)
+7. [☁️ Remote Repositories](#️-6-remote-repositories)
+8. [🔍 History and Search](#-7-history-and-search)
+9. [⏪ Undo and Recovery](#-8-undo-and-recovery)
+10. [📦 Stash: Set Work Aside](#-9-stash-set-work-aside)
+11. [🏷️ Tags and Releases](#️-10-tags-and-releases)
+12. [🙈 .gitignore for Python Projects](#-11-gitignore-for-python-projects)
+13. [🤝 Team Workflow (GitHub Flow)](#-12-team-workflow-github-flow)
+14. [🚑 SOS Scenarios](#-13-sos-scenarios)
+15. [🏷️ Tag Index](#️-tag-index)
 
 ---
 
-## 🗺️ Як Git «думає»: чотири зони
+## 🗺️ How Git "Thinks": Four Zones
 
 ```mermaid
 graph LR
-    WD["📂 Робоча папка<br/>твої файли"] -- "git add" --> ST["🎯 Staging<br/>індекс"]
-    ST -- "git commit" --> LR["🗄️ Локальний репозиторій<br/>історія комітів"]
-    LR -- "git push" --> RR["☁️ Віддалений репо<br/>GitHub / GitLab"]
+    WD["📂 Working directory<br/>your files"] -- "git add" --> ST["🎯 Staging<br/>index"]
+    ST -- "git commit" --> LR["🗄️ Local repository<br/>commit history"]
+    LR -- "git push" --> RR["☁️ Remote repo<br/>GitHub / GitLab"]
     RR -- "git fetch" --> LR
     LR -- "git checkout / switch / restore" --> WD
     RR -- "git pull = fetch + merge" --> WD
 ```
 
-> 💡 Майже вся плутанина в Git зникає, коли розумієш, у якій зоні зараз твої зміни. Команда `git status` завжди це показує.
+> 💡 Almost all confusion in Git disappears once you know which zone your changes are in right now. `git status` always tells you.
 
 ---
 
-## ⚡ Топ-15: команди на кожен день
+## ⚡ Top 15: Everyday Commands
 
 ```bash
-git status                              # 🟢 що змінилось
-git add <файл>                          # 🟡 додати у staging
-git commit -m "feat: опис"              # 🟡 зафіксувати
-git push                                # 🟡 відправити на сервер
-git pull                                # 🟡 забрати зміни з сервера
-git switch -c <гілка>                   # 🟡 створити гілку й перейти
-git switch <гілка>                      # 🟡 перейти на гілку
-git log --oneline --graph --decorate   # 🟢 компактна історія
-git diff                                # 🟢 що змінено (ще не в staging)
-git diff --staged                       # 🟢 що піде в наступний коміт
-git stash push -m "опис"                # 🟡 відкласти незакомічене
-git restore <файл>                      # 🔴 відкинути зміни у файлі
-git commit --amend                      # 🟡 виправити останній коміт
-git reflog                              # 🟢 «чорна скринька» всіх переміщень
-git fetch --prune                       # 🟢 оновити інформацію про сервер
+git status                              # 🟢 what changed
+git add <file>                          # 🟡 add to staging
+git commit -m "feat: description"       # 🟡 record a commit
+git push                                # 🟡 send to the server
+git pull                                # 🟡 get changes from the server
+git switch -c <branch>                  # 🟡 create a branch and switch to it
+git switch <branch>                     # 🟡 switch to a branch
+git log --oneline --graph --decorate    # 🟢 compact history
+git diff                                # 🟢 what changed (not yet staged)
+git diff --staged                       # 🟢 what will go into the next commit
+git stash push -m "description"         # 🟡 set aside uncommitted work
+git restore <file>                      # 🔴 discard changes in a file
+git commit --amend                      # 🟡 fix the last commit
+git reflog                              # 🟢 "black box" of all movements
+git fetch --prune                       # 🟢 refresh info about the server
 ```
 
 > [!IMPORTANT]
-> **Золоте правило:** комітся часто, маленькими логічними шматками. Закомічений код майже неможливо втратити, а незакомічений легко.
+> **Golden rule:** commit often, in small logical chunks. Committed code is almost impossible to lose; uncommitted code is easy to lose.
 
 ---
 
-# 🔧 1. Початкове налаштування
+# 🔧 1. Initial Setup
 
 `#config` `#setup`
 
 ```bash
-sudo dnf install git                                  # 🟡 встановити Git на Fedora
+sudo dnf install git                                  # 🟡 install Git on Fedora
 
-git config --global user.name  "Serhii"               # 🟡 ім'я в комітах
-git config --global user.email "you@example.com"      # 🟡 пошта (збігається з GitHub)
-git config --global init.defaultBranch main           # 🟡 головна гілка називається main
-git config --global pull.rebase false                 # 🟡 pull = merge (передбачувана поведінка)
-git config --global core.editor "nano"                # 🟡 редактор для повідомлень
-git config --global --list                            # 🟢 перевірити налаштування
+git config --global user.name  "Serhii"               # 🟡 name used in commits
+git config --global user.email "you@example.com"      # 🟡 email (matches GitHub)
+git config --global init.defaultBranch main           # 🟡 default branch is called main
+git config --global pull.rebase false                 # 🟡 pull = merge (predictable behavior)
+git config --global core.editor "nano"                # 🟡 editor for messages
+git config --global --list                            # 🟢 check settings
 ```
 
-## 🔑 SSH-ключ для GitHub 🆕
+## 🔑 SSH Key for GitHub 🆕
 
 ```bash
-ssh-keygen -t ed25519 -C "you@example.com"            # 🟢 згенерувати ключ
-cat ~/.ssh/id_ed25519.pub                             # 🟢 скопіювати публічну частину у GitHub → Settings → SSH keys
-ssh -T git@github.com                                 # 🟢 перевірити зв'язок
+ssh-keygen -t ed25519 -C "you@example.com"            # 🟢 generate a key
+cat ~/.ssh/id_ed25519.pub                             # 🟢 copy the public part into GitHub → Settings → SSH keys
+ssh -T git@github.com                                 # 🟢 test the connection
 ```
 
 > [!WARNING]
-> Ніколи не віддавай і не коміть файл `id_ed25519` (без `.pub`). Це твій приватний ключ.
+> Never share or commit the `id_ed25519` file (the one without `.pub`). It is your private key.
 
-## 🧩 Зручні псевдоніми (aliases) 🆕
+## 🧩 Handy Aliases 🆕
 
 ```bash
 git config --global alias.st "status -sb"
@@ -126,26 +126,26 @@ git config --global alias.last "log -1 HEAD --stat"
 git config --global alias.unstage "restore --staged"
 ```
 
-Після цього: `git st`, `git lg`, `git last`, `git unstage <файл>`.
+Afterwards: `git st`, `git lg`, `git last`, `git unstage <file>`.
 
 ---
 
-# 🚀 2. Старт проєкту: init і clone
+# 🚀 2. Starting a Project: init and clone
 
 `#init` `#clone`
 
 ```bash
-git init                                # 🟢 створити репозиторій у поточній папці
-git clone <url>                         # 🟢 скопіювати репозиторій
-git clone <url> <папка>                 # 🟢 клонувати в іншу папку
-git clone --depth 1 <url>               # 🟢 лише останній стан (швидко, без історії) 🆕
+git init                                # 🟢 create a repository in the current folder
+git clone <url>                         # 🟢 copy a repository
+git clone <url> <folder>                # 🟢 clone into a different folder
+git clone --depth 1 <url>               # 🟢 latest state only (fast, no history) 🆕
 ```
 
-## 🔗 Підключення існуючого проєкту до GitHub
+## 🔗 Connecting an Existing Project to GitHub
 
 ```mermaid
 graph LR
-    A["1. git init"] --> B["2. Створи порожній репо на GitHub"]
+    A["1. git init"] --> B["2. Create an empty repo on GitHub"]
     B --> C["3. git remote add origin"]
     C --> D["4. git add . && git commit"]
     D --> E["5. git push -u origin main"]
@@ -154,21 +154,21 @@ graph LR
 ```bash
 git init
 git add .
-git commit -m "chore: перший коміт"
-git branch -M main                                    # 🟡 гарантувати назву гілки main
-git remote add origin git@github.com:<користувач>/<репо>.git
-git push -u origin main                               # 🟡 -u запам'ятовує зв'язок гілок
+git commit -m "chore: initial commit"
+git branch -M main                                    # 🟡 make sure the branch is named main
+git remote add origin git@github.com:<user>/<repo>.git
+git push -u origin main                               # 🟡 -u remembers the branch link
 ```
 
 ---
 
-# 📝 3. Щоденний цикл: зміни → коміт
+# 📝 3. Daily Cycle: Changes → Commit
 
 `#commit` `#staging`
 
 ```mermaid
 graph TD
-    A["✏️ Редагуєш файли"] --> B["git status"]
+    A["✏️ Edit files"] --> B["git status"]
     B --> C["git diff"]
     C --> D["git add"]
     D --> E["git commit"]
@@ -176,42 +176,42 @@ graph TD
     F --> A
 ```
 
-| Дія | Команда |
+| Action | Command |
 |---|---|
-| 🟢 Стан репозиторію | `git status` (коротко: `git status -sb`) |
-| 🟢 Зміни до staging | `git diff` |
-| 🟢 Зміни у staging | `git diff --staged` |
-| 🟡 Додати файл | `git add <файл>` |
-| 🟡 Додати все змінене | `git add -A` |
-| 🟡 Додавати частинами (інтерактивно) 🆕 | `git add -p` |
-| 🟡 Прибрати з staging | `git restore --staged <файл>` |
-| 🟡 Коміт | `git commit -m "повідомлення"` |
-| 🟡 Додати відстежувані файли + коміт 🆕 | `git commit -am "повідомлення"` |
-| 🟡 Виправити останній коміт | `git commit --amend` |
-| 🟡 Додати забутий файл до останнього коміту 🆕 | `git add <файл> && git commit --amend --no-edit` |
-| 🟡 Видалити файл з Git і диска | `git rm <файл>` |
-| 🟡 Видалити з Git, залишити на диску 🆕 | `git rm --cached <файл>` |
-| 🟡 Перейменувати/перемістити 🆕 | `git mv <старе> <нове>` |
+| 🟢 Repository state | `git status` (short: `git status -sb`) |
+| 🟢 Changes not yet staged | `git diff` |
+| 🟢 Changes in staging | `git diff --staged` |
+| 🟡 Add a file | `git add <file>` |
+| 🟡 Add everything changed | `git add -A` |
+| 🟡 Add in parts (interactive) 🆕 | `git add -p` |
+| 🟡 Remove from staging | `git restore --staged <file>` |
+| 🟡 Commit | `git commit -m "message"` |
+| 🟡 Stage tracked files + commit 🆕 | `git commit -am "message"` |
+| 🟡 Fix the last commit | `git commit --amend` |
+| 🟡 Add a forgotten file to the last commit 🆕 | `git add <file> && git commit --amend --no-edit` |
+| 🟡 Delete a file from Git and disk | `git rm <file>` |
+| 🟡 Remove from Git, keep on disk 🆕 | `git rm --cached <file>` |
+| 🟡 Rename/move 🆕 | `git mv <old> <new>` |
 
-> 💡 `git add -p` дозволяє відібрати лише потрібні шматки змін, щоб коміти були чистими та логічними.
+> 💡 `git add -p` lets you pick only the chunks of changes you want, so commits stay clean and logical.
 
-## ✍️ Як писати повідомлення комітів
+## ✍️ How to Write Commit Messages
 
-Формат **Conventional Commits**: `тип: короткий опис` (до ~70 символів, у наказовому способі).
+**Conventional Commits** format: `type: short description` (up to ~70 characters, in the imperative mood).
 
-| Тип | Коли використовувати | Приклад |
+| Type | When to use | Example |
 |---|---|---|
-| `feat` | нова функція | `feat: додати ендпоінт /parks` |
-| `fix` | виправлення помилки | `fix: виправити 500 при пустому запиті` |
-| `docs` | документація | `docs: описати запуск через Docker` |
-| `refactor` | зміна коду без зміни поведінки | `refactor: винести логіку в сервіс` |
-| `test` | тести | `test: покрити авторизацію` |
-| `chore` | службове (залежності, конфіги) | `chore: оновити requirements` |
-| `style` | форматування | `style: застосувати black` |
+| `feat` | new feature | `feat: add /parks endpoint` |
+| `fix` | bug fix | `fix: handle 500 on empty request` |
+| `docs` | documentation | `docs: describe running via Docker` |
+| `refactor` | code change without behavior change | `refactor: move logic into a service` |
+| `test` | tests | `test: cover authorization` |
+| `chore` | housekeeping (dependencies, configs) | `chore: update requirements` |
+| `style` | formatting | `style: apply black` |
 
 ---
 
-# 🌿 4. Гілки
+# 🌿 4. Branches
 
 `#branch`
 
@@ -229,296 +229,296 @@ gitGraph
     commit id: "E"
 ```
 
-| Дія | Команда |
+| Action | Command |
 |---|---|
-| 🟢 Список локальних гілок | `git branch` |
-| 🟢 Усі гілки (з віддаленими) | `git branch -a` |
-| 🟢 Остання активність у гілках 🆕 | `git branch -vv` |
-| 🟡 Створити і перейти | `git switch -c <гілка>` |
-| 🟡 Перейти | `git switch <гілка>` |
-| 🟡 Повернутись на попередню гілку 🆕 | `git switch -` |
-| 🟡 Перейменувати поточну | `git branch -m <нова_назва>` |
-| 🟡 Видалити (якщо вже влита) | `git branch -d <гілка>` |
-| 🔴 Видалити примусово | `git branch -D <гілка>` |
-| 🟡 Видалити на сервері | `git push origin --delete <гілка>` |
-| 🟢 Які гілки вже влиті в main 🆕 | `git branch --merged main` |
+| 🟢 List local branches | `git branch` |
+| 🟢 All branches (including remote) | `git branch -a` |
+| 🟢 Latest activity per branch 🆕 | `git branch -vv` |
+| 🟡 Create and switch | `git switch -c <branch>` |
+| 🟡 Switch | `git switch <branch>` |
+| 🟡 Go back to the previous branch 🆕 | `git switch -` |
+| 🟡 Rename the current one | `git branch -m <new_name>` |
+| 🟡 Delete (if already merged) | `git branch -d <branch>` |
+| 🔴 Force delete | `git branch -D <branch>` |
+| 🟡 Delete on the server | `git push origin --delete <branch>` |
+| 🟢 Which branches are already merged into main 🆕 | `git branch --merged main` |
 
-## 🏷️ Іменування гілок
+## 🏷️ Branch Naming
 
-| Префікс | Призначення | Приклад |
+| Prefix | Purpose | Example |
 |---|---|---|
-| `feature/` | нова функціональність | `feature/user-auth` |
-| `fix/` | виправлення | `fix/login-timeout` |
-| `hotfix/` | термінове виправлення продакшну | `hotfix/payment-crash` |
-| `refactor/` | рефакторинг | `refactor/db-layer` |
-| `docs/` | документація | `docs/readme` |
+| `feature/` | new functionality | `feature/user-auth` |
+| `fix/` | bug fixes | `fix/login-timeout` |
+| `hotfix/` | urgent production fix | `hotfix/payment-crash` |
+| `refactor/` | refactoring | `refactor/db-layer` |
+| `docs/` | documentation | `docs/readme` |
 
 ---
 
-# 🔀 5. Merge, Rebase та конфлікти
+# 🔀 5. Merge, Rebase, and Conflicts
 
 `#merge` `#rebase` `#conflicts`
 
-## 🔹 Merge та Rebase: різниця
+## 🔹 Merge vs Rebase: The Difference
 
 ```mermaid
 graph TD
-    subgraph MERGE["🔀 Merge: зберігає історію як є"]
+    subgraph MERGE["🔀 Merge: keeps history as is"]
         M1["main: A → B → D → M"]
         M2["feature: B → C → ↗ M"]
     end
-    subgraph REBASE["📐 Rebase: рівна лінійна історія"]
+    subgraph REBASE["📐 Rebase: flat, linear history"]
         R1["main: A → B → D"]
-        R2["feature: → C' (переписано поверх D)"]
+        R2["feature: → C' (rewritten on top of D)"]
     end
 ```
 
 | | Merge | Rebase |
 |---|---|---|
-| Історія | зберігається повністю, з комітом злиття | лінійна, «акуратна» |
-| Безпека | 🟢 безпечніше | 🟡 переписує коміти |
-| Коли | вливаєш гілку в `main` | оновлюєш свою гілку свіжим `main` |
+| History | fully preserved, with a merge commit | linear, "tidy" |
+| Safety | 🟢 safer | 🟡 rewrites commits |
+| When | merging a branch into `main` | updating your branch with fresh `main` |
 
 > [!CAUTION]
-> **Золоте правило rebase:** ніколи не роби rebase гілки, яку вже відправив на сервер і з якою працюють інші. Rebase змінює ідентифікатори комітів.
+> **Golden rule of rebase:** never rebase a branch that you've already pushed and that others are working on. Rebase changes commit IDs.
 
 ```bash
-# 🟡 Влити гілку в main
+# 🟡 Merge a branch into main
 git switch main
 git pull
-git merge <гілка>                       # додай --no-ff, щоб завжди створювати merge-коміт 🆕
+git merge <branch>                      # add --no-ff to always create a merge commit 🆕
 
-# 🟡 Оновити свою гілку свіжим main
-git switch <гілка>
+# 🟡 Update your branch with fresh main
+git switch <branch>
 git fetch origin
 git rebase origin/main
 
-# 🟡 Інтерактивний rebase: почистити останні 3 коміти (squash, reword, drop) 🆕
+# 🟡 Interactive rebase: clean up the last 3 commits (squash, reword, drop) 🆕
 git rebase -i HEAD~3
 
-# 🟡 Забрати один конкретний коміт з іншої гілки 🆕
-git cherry-pick <хеш_коміту>
+# 🟡 Take one specific commit from another branch 🆕
+git cherry-pick <commit_hash>
 ```
 
-## 🔹 Розв'язання конфліктів
+## 🔹 Resolving Conflicts
 
 ```mermaid
 graph TD
-    A["💥 CONFLICT"] --> B["git status<br/>які файли конфліктують"]
-    B --> C["Відкрий файл, знайди маркери"]
-    C --> D["Залиш потрібний варіант<br/>видали маркери"]
-    D --> E["git add файл"]
-    E --> F{"merge чи rebase?"}
+    A["💥 CONFLICT"] --> B["git status<br/>which files conflict"]
+    B --> C["Open the file, find the markers"]
+    C --> D["Keep the version you need<br/>remove the markers"]
+    D --> E["git add file"]
+    E --> F{"merge or rebase?"}
     F -->|"merge"| G["git commit"]
     F -->|"rebase"| H["git rebase --continue"]
 ```
 
-Так виглядає конфлікт у файлі:
+This is what a conflict looks like in a file:
 
 ```text
 <<<<<<< HEAD
-твій варіант
+your version
 =======
-варіант з іншої гілки
+version from the other branch
 >>>>>>> feature/auth
 ```
 
 ```bash
-git merge --abort                       # 🟢 скасувати злиття, повернутись до стану до merge
-git rebase --abort                      # 🟢 скасувати rebase
-git checkout --ours   <файл>            # 🟡 взяти нашу версію файлу (під час merge) 🆕
-git checkout --theirs <файл>            # 🟡 взяти їхню версію файлу (під час merge) 🆕
+git merge --abort                       # 🟢 cancel the merge, return to the pre-merge state
+git rebase --abort                      # 🟢 cancel the rebase
+git checkout --ours   <file>            # 🟡 take our version of the file (during merge) 🆕
+git checkout --theirs <file>            # 🟡 take their version of the file (during merge) 🆕
 ```
 
-> 💡 Не знаєш, що саме зламалось: `git diff --name-only --diff-filter=U` покаже лише файли з нерозв'язаними конфліктами.
+> 💡 Not sure what exactly broke: `git diff --name-only --diff-filter=U` shows only files with unresolved conflicts.
 
 ---
 
-# ☁️ 6. Віддалені репозиторії
+# ☁️ 6. Remote Repositories
 
 `#remote` `#push` `#pull`
 
 ```bash
-git remote -v                                         # 🟢 які remote підключені
-git remote add origin <url>                           # 🟡 додати remote
-git remote set-url origin <новий_url>                 # 🟡 змінити адресу
-git remote add upstream <url_оригіналу>               # 🟡 для форків 🆕
+git remote -v                                         # 🟢 which remotes are configured
+git remote add origin <url>                           # 🟡 add a remote
+git remote set-url origin <new_url>                   # 🟡 change the address
+git remote add upstream <original_url>                # 🟡 for forks 🆕
 
-git fetch                                             # 🟢 завантажити зміни, нічого не змінюючи
-git fetch --prune                                     # 🟢 + прибрати посилання на видалені гілки
+git fetch                                             # 🟢 download changes without changing anything
+git fetch --prune                                     # 🟢 + remove references to deleted branches
 git pull                                              # 🟡 fetch + merge
-git pull --rebase                                     # 🟡 fetch + rebase (рівніша історія) 🆕
-git push                                              # 🟡 відправити
-git push -u origin <гілка>                            # 🟡 вперше відправити нову гілку
-git push --force-with-lease                           # 🔴 безпечніший force-push 🆕
+git pull --rebase                                     # 🟡 fetch + rebase (flatter history) 🆕
+git push                                              # 🟡 send
+git push -u origin <branch>                           # 🟡 push a new branch for the first time
+git push --force-with-lease                           # 🔴 safer force-push 🆕
 ```
 
 ```mermaid
 graph LR
-    L["💻 Локально"] -- "git push" --> O["☁️ origin"]
+    L["💻 Local"] -- "git push" --> O["☁️ origin"]
     O -- "git fetch / pull" --> L
-    U["🍴 upstream<br/>оригінальний проєкт"] -- "git fetch upstream" --> L
+    U["🍴 upstream<br/>original project"] -- "git fetch upstream" --> L
 ```
 
 > [!WARNING]
-> **Ніколи** не роби `git push --force` у спільну гілку (`main`). Якщо force необхідний у своїй гілці, використовуй `--force-with-lease`: він відмовить, якщо на сервері є чужі коміти, яких ти не бачив.
+> **Never** run `git push --force` to a shared branch (`main`). If force is necessary on your own branch, use `--force-with-lease`: it refuses if the server has someone else's commits you haven't seen.
 
 ---
 
-# 🔍 7. Історія та пошук
+# 🔍 7. History and Search
 
 `#log` `#diff` `#blame`
 
-| Дія | Команда |
+| Action | Command |
 |---|---|
-| 🟢 Компактна історія | `git log --oneline` |
-| 🟢 Граф усіх гілок | `git log --oneline --graph --decorate --all` |
-| 🟢 Історія одного файлу | `git log --follow -p <файл>` |
-| 🟢 Останні N комітів | `git log -5` |
-| 🟢 Зміни в коміті | `git show <хеш>` |
-| 🟢 Коміти за автором | `git log --author="Serhii"` |
-| 🟢 За період | `git log --since="2 weeks ago"` |
-| 🟢 Пошук у повідомленнях | `git log --grep="auth"` |
-| 🟢 Коли додали/прибрали рядок 🆕 | `git log -S"назва_функції"` |
-| 🟢 Хто змінив кожен рядок | `git blame <файл>` |
-| 🟢 Порівняти гілки | `git diff main..<гілка>` |
-| 🟢 Статистика змін 🆕 | `git diff --stat` |
-| 🟢 Файли, змінені в коміті 🆕 | `git show --name-only <хеш>` |
+| 🟢 Compact history | `git log --oneline` |
+| 🟢 Graph of all branches | `git log --oneline --graph --decorate --all` |
+| 🟢 History of a single file | `git log --follow -p <file>` |
+| 🟢 Last N commits | `git log -5` |
+| 🟢 Changes in a commit | `git show <hash>` |
+| 🟢 Commits by author | `git log --author="Serhii"` |
+| 🟢 For a period | `git log --since="2 weeks ago"` |
+| 🟢 Search commit messages | `git log --grep="auth"` |
+| 🟢 When a line was added/removed 🆕 | `git log -S"function_name"` |
+| 🟢 Who changed each line | `git blame <file>` |
+| 🟢 Compare branches | `git diff main..<branch>` |
+| 🟢 Change statistics 🆕 | `git diff --stat` |
+| 🟢 Files changed in a commit 🆕 | `git show --name-only <hash>` |
 
-## 🎯 Бінарний пошук помилки (bisect) 🆕
+## 🎯 Binary Search for a Bug (bisect) 🆕
 
-Коли «раніше працювало, а тепер ні»:
+When "it used to work, but now it doesn't":
 
 ```mermaid
 graph LR
-    A["git bisect start"] --> B["git bisect bad<br/>поточний — зламаний"]
-    B --> C["git bisect good хеш<br/>давній — робочий"]
-    C --> D["Git перемикає на середину"]
-    D --> E{"Працює?"}
-    E -->|"так"| F["git bisect good"]
-    E -->|"ні"| G["git bisect bad"]
+    A["git bisect start"] --> B["git bisect bad<br/>current — broken"]
+    B --> C["git bisect good hash<br/>old — working"]
+    C --> D["Git checks out the midpoint"]
+    D --> E{"Works?"}
+    E -->|"yes"| F["git bisect good"]
+    E -->|"no"| G["git bisect bad"]
     F --> D
     G --> D
-    D --> H["Знайдено коміт-винуватець"]
+    D --> H["Culprit commit found"]
     H --> I["git bisect reset"]
 ```
 
 ---
 
-# ⏪ 8. Скасування та відновлення
+# ⏪ 8. Undo and Recovery
 
 `#undo` `#reset` `#revert` `#reflog`
 
-## 🧭 Що саме я хочу скасувати?
+## 🧭 What exactly do I want to undo?
 
 ```mermaid
 graph TD
-    Q{"Що скасувати?"} --> A["Зміни у файлі<br/>ще не в staging"]
-    Q --> B["Файл у staging<br/>ще не коміт"]
-    Q --> C["Останній локальний коміт<br/>ще не push"]
-    Q --> D["Коміт, який уже на сервері"]
-    Q --> E["Я все зламав і заплутався"]
-    A --> A1["git restore файл"]
-    B --> B1["git restore --staged файл"]
+    Q{"What to undo?"} --> A["Changes in a file<br/>not yet staged"]
+    Q --> B["File in staging<br/>not yet committed"]
+    Q --> C["Last local commit<br/>not yet pushed"]
+    Q --> D["A commit already on the server"]
+    Q --> E["I broke everything and got lost"]
+    A --> A1["git restore file"]
+    B --> B1["git restore --staged file"]
     C --> C1["git reset --soft HEAD~1"]
-    D --> D1["git revert хеш"]
+    D --> D1["git revert hash"]
     E --> E1["git reflog → git reset --hard"]
 ```
 
-| Ситуація | Команда | Ризик |
+| Situation | Command | Risk |
 |---|---|---|
-| Відкинути зміни у файлі | `git restore <файл>` | 🔴 зміни зникнуть назавжди |
-| Прибрати файл зі staging | `git restore --staged <файл>` | 🟢 |
-| Скасувати коміт, **зберегти** зміни у staging | `git reset --soft HEAD~1` | 🟡 |
-| Скасувати коміт, зміни залишити у файлах | `git reset --mixed HEAD~1` | 🟡 |
-| Скасувати коміт і **знищити** зміни | `git reset --hard HEAD~1` | 🔴 |
-| Безпечно скасувати вже опублікований коміт | `git revert <хеш>` | 🟢 створює новий коміт |
-| Повернути файл з іншого коміту | `git restore --source=<хеш> <файл>` | 🟡 |
-| Прибрати невідстежувані файли (спершу перегляд) | `git clean -n` | 🟢 |
-| Реально видалити невідстежувані файли | `git clean -fd` | 🔴 |
+| Discard changes in a file | `git restore <file>` | 🔴 changes are gone for good |
+| Remove a file from staging | `git restore --staged <file>` | 🟢 |
+| Undo a commit, **keep** changes in staging | `git reset --soft HEAD~1` | 🟡 |
+| Undo a commit, keep changes in files | `git reset --mixed HEAD~1` | 🟡 |
+| Undo a commit and **destroy** changes | `git reset --hard HEAD~1` | 🔴 |
+| Safely undo an already published commit | `git revert <hash>` | 🟢 creates a new commit |
+| Restore a file from another commit | `git restore --source=<hash> <file>` | 🟡 |
+| Remove untracked files (preview first) | `git clean -n` | 🟢 |
+| Actually delete untracked files | `git clean -fd` | 🔴 |
 
-### Різниця reset: --soft, --mixed, --hard
+### The reset Difference: --soft, --mixed, --hard
 
 ```mermaid
 graph LR
     subgraph SOFT["--soft"]
-        S1["Коміт скасовано"] --> S2["Зміни лишились у staging"]
+        S1["Commit undone"] --> S2["Changes stay in staging"]
     end
-    subgraph MIXED["--mixed (за замовчуванням)"]
-        M1["Коміт скасовано"] --> M2["Зміни лишились у файлах"]
+    subgraph MIXED["--mixed (default)"]
+        M1["Commit undone"] --> M2["Changes stay in files"]
     end
     subgraph HARD["--hard"]
-        H1["Коміт скасовано"] --> H2["Зміни видалено ❌"]
+        H1["Commit undone"] --> H2["Changes deleted ❌"]
     end
 ```
 
 > [!TIP]
-> **Правило безпеки:** `reset` для локальних, ще не опублікованих комітів. `revert` для всього, що вже на сервері.
+> **Safety rule:** use `reset` for local, not-yet-published commits. Use `revert` for anything already on the server.
 
-## 🛟 Reflog: порятунок «втраченого»
+## 🛟 Reflog: Rescuing "Lost" Work
 
 ```bash
-git reflog                              # 🟢 журнал усіх переміщень HEAD (зберігається ~90 днів)
-git reset --hard HEAD@{2}               # 🔴 повернутись до стану 2 кроки тому
-git switch -c rescue <хеш>              # 🟢 створити гілку з «загубленого» коміту
+git reflog                              # 🟢 log of all HEAD movements (kept ~90 days)
+git reset --hard HEAD@{2}               # 🔴 return to the state 2 steps ago
+git switch -c rescue <hash>             # 🟢 create a branch from a "lost" commit
 ```
 
-> 💡 Видалив гілку з незливою роботою? Знайди її останній коміт у `git reflog`, потім `git switch -c rescue <хеш>`. Дані ще на місці.
+> 💡 Deleted a branch with unmerged work? Find its last commit in `git reflog`, then `git switch -c rescue <hash>`. The data is still there.
 
 ---
 
-# 📦 9. Stash: відкласти роботу
+# 📦 9. Stash: Set Work Aside
 
 `#stash`
 
-Коли треба терміново перейти на іншу гілку, а поточні зміни ще не готові до коміту:
+When you urgently need to switch to another branch, but your current changes aren't ready to commit:
 
 ```mermaid
 graph LR
-    A["Незакомічені зміни"] -- "git stash push" --> B["📦 Схованка"]
-    B -- "git switch іншa-гілка" --> C["Робиш термінове"]
-    C -- "git switch назад" --> D["git stash pop"]
-    D --> E["Зміни повернулись"]
+    A["Uncommitted changes"] -- "git stash push" --> B["📦 Stash"]
+    B -- "git switch other-branch" --> C["Do the urgent thing"]
+    C -- "git switch back" --> D["git stash pop"]
+    D --> E["Changes are back"]
 ```
 
 ```bash
-git stash push -m "опис"                # 🟡 сховати зміни (відстежувані файли)
-git stash push -u -m "опис"             # 🟡 сховати й нові (untracked) файли 🆕
-git stash list                          # 🟢 список схованок
-git stash show -p stash@{0}             # 🟢 що всередині 🆕
-git stash pop                           # 🟡 повернути останню й видалити зі схованки
-git stash apply stash@{1}               # 🟡 повернути, залишивши копію у схованці
-git stash drop stash@{0}                # 🔴 видалити схованку
+git stash push -m "description"         # 🟡 stash changes (tracked files)
+git stash push -u -m "description"      # 🟡 stash new (untracked) files too 🆕
+git stash list                          # 🟢 list stashes
+git stash show -p stash@{0}             # 🟢 what's inside 🆕
+git stash pop                           # 🟡 restore the latest and remove it from the stash
+git stash apply stash@{1}               # 🟡 restore, keeping a copy in the stash
+git stash drop stash@{0}                # 🔴 delete a stash
 ```
 
 ---
 
-# 🏷️ 10. Теги та релізи
+# 🏷️ 10. Tags and Releases
 
 `#tags` `#release`
 
 ```bash
-git tag                                 # 🟢 список тегів
-git tag v1.0.0                          # 🟡 легкий тег
-git tag -a v1.0.0 -m "Перший реліз"     # 🟡 анотований тег (рекомендовано)
-git push origin v1.0.0                  # 🟡 відправити тег
-git push origin --tags                  # 🟡 відправити всі теги
-git tag -d v1.0.0                       # 🟡 видалити локально
-git push origin --delete v1.0.0         # 🔴 видалити на сервері
+git tag                                 # 🟢 list tags
+git tag v1.0.0                          # 🟡 lightweight tag
+git tag -a v1.0.0 -m "First release"    # 🟡 annotated tag (recommended)
+git push origin v1.0.0                  # 🟡 push a tag
+git push origin --tags                  # 🟡 push all tags
+git tag -d v1.0.0                       # 🟡 delete locally
+git push origin --delete v1.0.0         # 🔴 delete on the server
 ```
 
-> 💡 Використовуй семантичні версії **MAJOR.MINOR.PATCH**: `2.4.1`. MAJOR міняєш при несумісних змінах, MINOR при нових можливостях, PATCH при виправленнях.
+> 💡 Use semantic versions **MAJOR.MINOR.PATCH**: `2.4.1`. Bump MAJOR for incompatible changes, MINOR for new features, PATCH for fixes.
 
 ---
 
-# 🙈 11. .gitignore для Python-проєктів
+# 🙈 11. .gitignore for Python Projects
 
 `#gitignore` `#python` `#security`
 
-Файл `.gitignore` у корені проєкту (шаблон для FastAPI / Django):
+A `.gitignore` file in the project root (template for FastAPI / Django):
 
 ```gitignore
-# Віртуальні оточення
+# Virtual environments
 .venv/
 venv/
 env/
@@ -531,14 +531,14 @@ __pycache__/
 .mypy_cache/
 .ruff_cache/
 
-# Секрети та конфіги середовища
+# Secrets and environment configs
 .env
 .env.*
 !.env.example
 *.pem
 *.key
 
-# Бази даних і локальні дані
+# Databases and local data
 *.sqlite3
 *.db
 db.sqlite3
@@ -550,152 +550,152 @@ media/
 # Docker
 docker-compose.override.yml
 
-# IDE та ОС
+# IDE and OS
 .vscode/
 .idea/
 .DS_Store
 ```
 
 ```bash
-git check-ignore -v <файл>              # 🟢 чому файл ігнорується
-git rm --cached <файл>                  # 🟡 перестати відстежувати вже доданий файл
-git rm -r --cached .                    # 🟡 перечитати .gitignore для всього проєкту
+git check-ignore -v <file>              # 🟢 why a file is ignored
+git rm --cached <file>                  # 🟡 stop tracking an already added file
+git rm -r --cached .                    # 🟡 re-read .gitignore for the whole project
 ```
 
 > [!CAUTION]
-> `.gitignore` працює лише для файлів, які **ще не** відстежуються. Якщо `.env` уже потрапив у коміт, ігнорування не допоможе. Див. сценарій «Секрет у репозиторії» нижче.
+> `.gitignore` only works for files that are **not yet** tracked. If `.env` has already been committed, ignoring it won't help. See the "I committed .env / password / token" scenario below.
 
-> 💡 Тримай у репозиторії файл `.env.example` з назвами змінних без реальних значень, щоб було ясно, що налаштовувати.
+> 💡 Keep a `.env.example` file in the repository with variable names but no real values, so it's clear what needs to be configured.
 
 ---
 
-# 🤝 12. Командний процес (GitHub Flow)
+# 🤝 12. Team Workflow (GitHub Flow)
 
 `#workflow` `#pullrequest`
 
 ```mermaid
 graph TD
-    A["1. Оновити main<br/>git pull"] --> B["2. Нова гілка<br/>git switch -c feature/..."]
-    B --> C["3. Коміти<br/>маленькі й часті"]
+    A["1. Update main<br/>git pull"] --> B["2. New branch<br/>git switch -c feature/..."]
+    B --> C["3. Commits<br/>small and frequent"]
     C --> D["4. Push<br/>git push -u origin ..."]
     D --> E["5. Pull Request"]
     E --> F["6. Code Review"]
-    F --> G{"Зауваження?"}
-    G -->|"так"| C
-    G -->|"ні"| H["7. Merge у main"]
-    H --> I["8. Видалити гілку"]
+    F --> G{"Comments?"}
+    G -->|"yes"| C
+    G -->|"no"| H["7. Merge into main"]
+    H --> I["8. Delete the branch"]
     I --> A
 ```
 
 ```bash
-# Повний цикл однієї задачі
+# Full cycle of a single task
 git switch main && git pull
 git switch -c feature/add-search
-# ... робота, коміти ...
+# ... work, commits ...
 git fetch origin
-git rebase origin/main                  # 🟡 підтягнути свіжий main (поки гілка лише твоя)
+git rebase origin/main                  # 🟡 pull in fresh main (while the branch is only yours)
 git push -u origin feature/add-search
-# ... Pull Request на GitHub, review, merge ...
+# ... Pull Request on GitHub, review, merge ...
 git switch main && git pull
-git branch -d feature/add-search        # 🟡 прибрати локальну гілку
-git fetch --prune                       # 🟢 прибрати зниклі віддалені посилання
+git branch -d feature/add-search        # 🟡 remove the local branch
+git fetch --prune                       # 🟢 clean up vanished remote references
 ```
 
-## 🖥️ GitHub CLI (опціонально) 🆕
+## 🖥️ GitHub CLI (optional) 🆕
 
 ```bash
-sudo dnf install gh                     # 🟡 встановити
-gh auth login                           # 🟡 авторизація
-gh pr create --fill                     # 🟡 створити Pull Request із даних комітів
-gh pr list                              # 🟢 список PR
-gh pr checkout <номер>                  # 🟡 забрати чужий PR локально
-gh repo clone <користувач>/<репо>       # 🟢 клонувати
+sudo dnf install gh                     # 🟡 install
+gh auth login                           # 🟡 authenticate
+gh pr create --fill                     # 🟡 create a Pull Request from commit data
+gh pr list                              # 🟢 list PRs
+gh pr checkout <number>                 # 🟡 check out someone else's PR locally
+gh repo clone <user>/<repo>             # 🟢 clone
 ```
 
 ---
 
-# 🚑 13. SOS-сценарії
+# 🚑 13. SOS Scenarios
 
-## 😱 «Закомітив у main замість нової гілки»
+## 😱 "I committed to main instead of a new branch"
 
 ```bash
-git switch -c feature/my-work           # 1. нова гілка зберігає коміти
+git switch -c feature/my-work           # 1. the new branch keeps the commits
 git switch main
-git reset --hard origin/main            # 2. 🔴 повернути main до стану сервера
+git reset --hard origin/main            # 2. 🔴 return main to the server's state
 ```
 
-## 🔑 «Закомітив .env / пароль / токен»
+## 🔑 "I committed .env / password / token"
 
 ```mermaid
 graph TD
-    A["🚨 Секрет потрапив у коміт"] --> B{"Уже зробив push?"}
-    B -->|"ні"| C["git reset --soft HEAD~1<br/>прибрати файл зі staging, додати в .gitignore"]
-    B -->|"так"| D["1. НЕГАЙНО змінити/анулювати секрет"]
-    D --> E["2. git rm --cached .env + .gitignore + новий коміт"]
-    E --> F["3. За потреби очистити історію<br/>git filter-repo"]
+    A["🚨 A secret got into a commit"] --> B{"Already pushed?"}
+    B -->|"no"| C["git reset --soft HEAD~1<br/>unstage the file, add it to .gitignore"]
+    B -->|"yes"| D["1. IMMEDIATELY rotate/revoke the secret"]
+    D --> E["2. git rm --cached .env + .gitignore + new commit"]
+    E --> F["3. If needed, clean the history<br/>git filter-repo"]
 ```
 
 > [!CAUTION]
-> Якщо секрет уже на сервері, вважай його **скомпрометованим**. Спершу відклич/перевипусти ключ чи пароль, а чистка історії вторинна: копії могли вже потрапити в чужі руки чи кеші.
+> If the secret is already on the server, consider it **compromised**. First revoke/reissue the key or password; cleaning history is secondary, since copies may already have reached other hands or caches.
 
-## ✏️ «Помилка в повідомленні останнього коміту»
-
-```bash
-git commit --amend -m "правильне повідомлення"     # 🟡 лише якщо ще не було push
-```
-
-## 🗑️ «Випадково видалив гілку»
+## ✏️ "Typo in the last commit message"
 
 ```bash
-git reflog                              # знайди хеш останнього коміту гілки
-git switch -c <гілка> <хеш>             # відновити
+git commit --amend -m "correct message"     # 🟡 only if it hasn't been pushed yet
 ```
 
-## 🧨 «Я зламав усе, хочу як на сервері»
+## 🗑️ "I accidentally deleted a branch"
+
+```bash
+git reflog                              # find the hash of the branch's last commit
+git switch -c <branch> <hash>           # restore it
+```
+
+## 🧨 "I broke everything, I want it like the server"
 
 ```bash
 git fetch origin
-git reset --hard origin/main            # 🔴 локальна гілка = точна копія сервера
-git clean -fd                           # 🔴 + прибрати невідстежувані файли (спершу git clean -n)
+git reset --hard origin/main            # 🔴 local branch = exact copy of the server
+git clean -fd                           # 🔴 + remove untracked files (run git clean -n first)
 ```
 
-## 🔁 «Push відхилено: non-fast-forward»
+## 🔁 "Push rejected: non-fast-forward"
 
 ```mermaid
 graph LR
     A["❌ push rejected"] --> B["git pull --rebase"]
-    B --> C{"Конфлікти?"}
-    C -->|"так"| D["Розв'язати → git add → rebase --continue"]
-    C -->|"ні"| E["git push"]
+    B --> C{"Conflicts?"}
+    C -->|"yes"| D["Resolve → git add → rebase --continue"]
+    C -->|"no"| E["git push"]
     D --> E
 ```
 
-## 🐌 «Закомітив величезний файл / `.venv`»
+## 🐌 "I committed a huge file / `.venv`"
 
 ```bash
-git rm -r --cached .venv                # 🟡 прибрати з відстеження
+git rm -r --cached .venv                # 🟡 stop tracking it
 echo ".venv/" >> .gitignore
-git commit -m "chore: прибрати .venv з репозиторію"
+git commit -m "chore: remove .venv from the repository"
 ```
 
-> 💡 Якщо файл уже у віддаленій історії, він залишається в ній. Для повного очищення потрібен `git filter-repo` (окремий інструмент: `sudo dnf install git-filter-repo`) і force-push, що потребує узгодження з командою.
+> 💡 If the file is already in the remote history, it stays there. Fully cleaning it requires `git filter-repo` (a separate tool: `sudo dnf install git-filter-repo`) and a force-push, which must be coordinated with the team.
 
 ---
 
-# 🏷️ Індекс тегів
+# 🏷️ Tag Index
 
-| Тег | Розділ |
+| Tag | Section |
 |---|---|
-| `#config` `#setup` | 🔧 Налаштування |
-| `#init` `#clone` | 🚀 Старт проєкту |
-| `#commit` `#staging` | 📝 Щоденний цикл |
-| `#branch` | 🌿 Гілки |
+| `#config` `#setup` | 🔧 Setup |
+| `#init` `#clone` | 🚀 Starting a project |
+| `#commit` `#staging` | 📝 Daily cycle |
+| `#branch` | 🌿 Branches |
 | `#merge` `#rebase` `#conflicts` | 🔀 Merge / Rebase |
-| `#remote` `#push` `#pull` | ☁️ Віддалені репозиторії |
-| `#log` `#diff` `#blame` | 🔍 Історія |
-| `#undo` `#reset` `#revert` `#reflog` | ⏪ Скасування |
+| `#remote` `#push` `#pull` | ☁️ Remote repositories |
+| `#log` `#diff` `#blame` | 🔍 History |
+| `#undo` `#reset` `#revert` `#reflog` | ⏪ Undo |
 | `#stash` | 📦 Stash |
-| `#tags` `#release` | 🏷️ Теги |
+| `#tags` `#release` | 🏷️ Tags |
 | `#gitignore` `#security` | 🙈 .gitignore |
 | `#workflow` `#pullrequest` | 🤝 GitHub Flow |
 
@@ -703,8 +703,8 @@ git commit -m "chore: прибрати .venv з репозиторію"
 
 <div align="center">
 
-**🧰 Порада:** перед будь-якою ризикованою командою створи страхувальну гілку: `git branch backup-перед-експериментом`.
+**🧰 Tip:** before any risky command, create a safety branch: `git branch backup-before-experiment`.
 
-*Коміти не зникають. Зникають лише ті, що не закомічені.* 🌿
+*Commits don't disappear. Only uncommitted work does.* 🌿
 
 </div>
