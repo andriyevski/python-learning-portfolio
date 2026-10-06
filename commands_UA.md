@@ -208,6 +208,7 @@ sudo dnf offline reboot
 ```bash
 flatpak remotes                          # 🟢 підключені джерела
 flatpak search <назва>                   # 🟢 пошук
+flatpak remote-ls --updates              # 🟢 список доступних оновлень
 flatpak install flathub <app.id>         # 🟡 встановити
 flatpak list                             # 🟢 встановлене
 flatpak update                           # 🟡 оновити все
